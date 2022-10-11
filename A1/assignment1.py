@@ -70,13 +70,15 @@ def reverse(arr: StaticArray) -> None:
 
 def rotate(arr: StaticArray, steps: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    take a static array and return a new static array rotated by the
+    specified number of steps
     """
     size = arr.size()
     new_arr = StaticArray(size)
     for i in range(size):
         val = arr.get(i)
         pos = i + steps
+        # if the position on the new array is outside the range, adjust it
         while pos < 0:
             pos += size
         if pos >= size:
@@ -92,9 +94,22 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
 
 def sa_range(start: int, end: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    takes a starting and ending integer and returns a static array counting
+    from start to end
     """
-    pass
+    size = abs(end - start) + 1
+    arr = StaticArray(size)
+    pos = 0
+    if end < start:
+        end -= 1
+        step = -1
+    else:
+        end += 1
+        step = 1
+    for i in range(start, end, step):
+        arr.set(pos, i)
+        pos += 1
+    return arr
 
 
 # ------------------- PROBLEM 6 - IS_SORTED ---------------------------------
@@ -248,24 +263,24 @@ if __name__ == "__main__":
     # print(arr)
 
 
-    print('\n# rotate example 1')
-    source = [_ for _ in range(-20, 20, 7)]
-    arr = StaticArray(len(source))
-    for i, value in enumerate(source):
-        arr.set(i, value)
-    print(arr)
-    for steps in [1, 2, 0, -1, -2, 28, -100]:
-        print(rotate(arr, steps), steps)
-    print(arr)
+    # print('\n# rotate example 1')
+    # source = [_ for _ in range(-20, 20, 7)]
+    # arr = StaticArray(len(source))
+    # for i, value in enumerate(source):
+    #     arr.set(i, value)
+    # print(arr)
+    # for steps in [1, 2, 0, -1, -2, 28, -100]:
+    #     print(rotate(arr, steps), steps)
+    # print(arr)
 
-    #
-    # print('\n# sa_range example 1')
-    # cases = [
-    #     (1, 3), (-1, 2), (0, 0), (0, -3),
-    #     (-105, -99), (-99, -105)]
-    # for start, end in cases:
-    #     print(start, end, sa_range(start, end))
-    #
+
+    print('\n# sa_range example 1')
+    cases = [
+        (1, 3), (-1, 2), (0, 0), (0, -3),
+        (-105, -99), (-99, -105)]
+    for start, end in cases:
+        print(start, end, sa_range(start, end))
+
     #
     # print('\n# is_sorted example 1')
     # test_cases = (
