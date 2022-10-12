@@ -117,9 +117,29 @@ def sa_range(start: int, end: int) -> StaticArray:
 
 def is_sorted(arr: StaticArray) -> int:
     """
-    TODO: Write this implementation
+    return 1 if arr is strictly ascending, 2 if strictly descending, 0 otherwise
     """
-    pass
+    # per instructions, if there is only one item in the list, treat it
+    # as strictly ascending
+    if arr.size() == 1:
+        return 1
+
+    ascending = True
+    descending = True
+
+    # iterate the list, checking consecutive values for ascending or descending
+    for i in range(arr.size()-2):
+        if arr.get(i) <= arr.get(i+1):
+            descending = False
+        if arr.get(i) >= arr.get(i+1):
+            ascending = False
+
+    if ascending:
+        return 1
+    elif descending:
+        return 2
+    else:
+        return 0
 
 
 # ------------------- PROBLEM 7 - SA_SORT -----------------------------------
@@ -274,30 +294,30 @@ if __name__ == "__main__":
     # print(arr)
 
 
-    print('\n# sa_range example 1')
-    cases = [
-        (1, 3), (-1, 2), (0, 0), (0, -3),
-        (-105, -99), (-99, -105)]
-    for start, end in cases:
-        print(start, end, sa_range(start, end))
+    # print('\n# sa_range example 1')
+    # cases = [
+    #     (1, 3), (-1, 2), (0, 0), (0, -3),
+    #     (-105, -99), (-99, -105)]
+    # for start, end in cases:
+    #     print(start, end, sa_range(start, end))
 
-    #
-    # print('\n# is_sorted example 1')
-    # test_cases = (
-    #     [-100, -8, 0, 2, 3, 10, 20, 100],
-    #     ['A', 'B', 'Z', 'a', 'z'],
-    #     ['Z', 'T', 'K', 'A', '5'],
-    #     [1, 3, -10, 20, -30, 0],
-    #     [-10, 0, 0, 10, 20, 30],
-    #     [100, 90, 0, -90, -200],
-    #     ['apple']
-    # )
-    # for case in test_cases:
-    #     arr = StaticArray(len(case))
-    #     for i, value in enumerate(case):
-    #         arr[i] = value
-    #     print('Result:', is_sorted(arr), arr)
-    #
+
+    print('\n# is_sorted example 1')
+    test_cases = (
+        [-100, -8, 0, 2, 3, 10, 20, 100],
+        ['A', 'B', 'Z', 'a', 'z'],
+        ['Z', 'T', 'K', 'A', '5'],
+        [1, 3, -10, 20, -30, 0],
+        [-10, 0, 0, 10, 20, 30],
+        [100, 90, 0, -90, -200],
+        ['apple']
+    )
+    for case in test_cases:
+        arr = StaticArray(len(case))
+        for i, value in enumerate(case):
+            arr[i] = value
+        print('Result:', is_sorted(arr), arr)
+
     #
     # print('\n# sa_sort example 1')
     # test_cases = (
