@@ -147,9 +147,18 @@ def is_sorted(arr: StaticArray) -> int:
 
 def sa_sort(arr: StaticArray) -> None:
     """
-    TODO: Write this implementation
+    use an insertion sort to sort the static array
     """
-    pass
+    for i in range(1, arr.size()):
+        val = arr.get(i)
+        pos = i - 1
+
+        while pos >= 0 and val < arr.get(pos):
+            arr.set(pos+1, arr.get(pos))
+            pos -= 1
+        arr.set(pos+1, val)
+
+
 
 
 # ------------------- PROBLEM 8 - REMOVE_DUPLICATES -------------------------
@@ -302,38 +311,38 @@ if __name__ == "__main__":
     #     print(start, end, sa_range(start, end))
 
 
-    print('\n# is_sorted example 1')
-    test_cases = (
-        [-100, -8, 0, 2, 3, 10, 20, 100],
-        ['A', 'B', 'Z', 'a', 'z'],
-        ['Z', 'T', 'K', 'A', '5'],
-        [1, 3, -10, 20, -30, 0],
-        [-10, 0, 0, 10, 20, 30],
-        [100, 90, 0, -90, -200],
-        ['apple']
-    )
-    for case in test_cases:
-        arr = StaticArray(len(case))
-        for i, value in enumerate(case):
-            arr[i] = value
-        print('Result:', is_sorted(arr), arr)
-
-    #
-    # print('\n# sa_sort example 1')
+    # print('\n# is_sorted example 1')
     # test_cases = (
-    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
-    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-    #     [(1, 1), (20, 1), (1, 20), (2, 20)],
-    #     [random.randrange(-30000, 30000) for _ in range(5_000)]
+    #     [-100, -8, 0, 2, 3, 10, 20, 100],
+    #     ['A', 'B', 'Z', 'a', 'z'],
+    #     ['Z', 'T', 'K', 'A', '5'],
+    #     [1, 3, -10, 20, -30, 0],
+    #     [-10, 0, 0, 10, 20, 30],
+    #     [100, 90, 0, -90, -200],
+    #     ['apple']
     # )
     # for case in test_cases:
     #     arr = StaticArray(len(case))
     #     for i, value in enumerate(case):
     #         arr[i] = value
-    #     print(arr if len(case) < 50 else 'Started sorting large array')
-    #     sa_sort(arr)
-    #     print(arr if len(case) < 50 else 'Finished sorting large array')
-    #
+    #     print('Result:', is_sorted(arr), arr)
+
+
+    print('\n# sa_sort example 1')
+    test_cases = (
+        [1, 10, 2, 20, 3, 30, 4, 40, 5],
+        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+        [(1, 1), (20, 1), (1, 20), (2, 20)],
+        [random.randrange(-30000, 30000) for _ in range(5_000)]
+    )
+    for case in test_cases:
+        arr = StaticArray(len(case))
+        for i, value in enumerate(case):
+            arr[i] = value
+        print(arr if len(case) < 50 else 'Started sorting large array')
+        sa_sort(arr)
+        print(arr if len(case) < 50 else 'Finished sorting large array')
+
     #
     #
     # print('\n# remove_duplicates example 1')
