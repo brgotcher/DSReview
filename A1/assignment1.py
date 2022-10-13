@@ -166,9 +166,22 @@ def sa_sort(arr: StaticArray) -> None:
 
 def remove_duplicates(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    take a static array and return a new one omitting duplicates
     """
-    pass
+    size = arr.size()
+    # create a temporary array that will hold the non-duplicates
+    new_arr = StaticArray(size)
+    pos = 1
+    new_arr.set(0, arr.get(0))
+    for i in range(1, size):
+        if arr.get(i) != arr.get(i-1):
+            new_arr.set(pos, arr.get(i))
+            pos += 1
+    # final array that will be the correct size
+    final_arr = StaticArray(pos)
+    for i in range(pos):
+        final_arr.set(i, new_arr.get(i))
+    return final_arr
 
 
 # ------------------- PROBLEM 9 - COUNT_SORT --------------------------------
@@ -176,9 +189,41 @@ def remove_duplicates(arr: StaticArray) -> StaticArray:
 
 def count_sort(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    count sort
     """
-    pass
+
+    min, max = min_max(arr)
+    domain = max - min
+    size = arr.size()
+
+    # create count array to keep track of amount of each value
+    count = StaticArray(domain+1)
+    for i in range(domain+1):
+        count.set(i, 0)
+
+    for i in range(size):
+        val = arr.get(i)
+        pos = val-min
+        count.set(pos, count.get(pos)+1)
+
+    for i in range(1, domain+1):
+        prev = count.get(i-1)
+        cur = count.get(i)
+        count.set(i, prev + cur)
+
+    # out array to put sorted values in
+    out = StaticArray(size)
+
+    for i in range(size):
+        val = arr.get(i)
+        pos = val-min
+        count.set(pos, count.get(pos)-1)
+        ind = size - count.get(pos) - 1
+        out.set(ind, val)
+
+    return out
+
+
 
 
 # ------------------- PROBLEM 10 - SA_INTERSECTION --------------------------
@@ -239,6 +284,7 @@ def transform_string(source: str, s1: str, s2: str) -> str:
 
 # BASIC TESTING
 if __name__ == "__main__":
+
 
     # print('\n# min_max example 1')
     # arr = StaticArray(5)
@@ -328,23 +374,23 @@ if __name__ == "__main__":
     #     print('Result:', is_sorted(arr), arr)
 
 
-    print('\n# sa_sort example 1')
-    test_cases = (
-        [1, 10, 2, 20, 3, 30, 4, 40, 5],
-        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-        [(1, 1), (20, 1), (1, 20), (2, 20)],
-        [random.randrange(-30000, 30000) for _ in range(5_000)]
-    )
-    for case in test_cases:
-        arr = StaticArray(len(case))
-        for i, value in enumerate(case):
-            arr[i] = value
-        print(arr if len(case) < 50 else 'Started sorting large array')
-        sa_sort(arr)
-        print(arr if len(case) < 50 else 'Finished sorting large array')
+    # print('\n# sa_sort example 1')
+    # test_cases = (
+    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
+    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+    #     [(1, 1), (20, 1), (1, 20), (2, 20)],
+    #     [random.randrange(-30000, 30000) for _ in range(5_000)]
+    # )
+    # for case in test_cases:
+    #     arr = StaticArray(len(case))
+    #     for i, value in enumerate(case):
+    #         arr[i] = value
+    #     print(arr if len(case) < 50 else 'Started sorting large array')
+    #     sa_sort(arr)
+    #     print(arr if len(case) < 50 else 'Finished sorting large array')
 
-    #
-    #
+
+
     # print('\n# remove_duplicates example 1')
     # test_cases = (
     #     [1], [1, 2], [1, 1, 2], [1, 20, 30, 40, 500, 500, 500],
@@ -357,22 +403,22 @@ if __name__ == "__main__":
     #     print(arr)
     #     print(remove_duplicates(arr))
     # print(arr)
-    #
-    #
-    # print('\n# count_sort example 1')
-    # test_cases = (
-    #     [1, 2, 4, 3, 5], [5, 4, 3, 2, 1], [0, -5, -3, -4, -2, -1, 0],
-    #     [-3, -2, -1, 0, 1, 2, 3], [1, 2, 3, 4, 3, 2, 1, 5, 5, 2, 3, 1],
-    #     [random.randrange(-499, 499) for _ in range(1_000_000)]
-    # )
-    # for case in test_cases:
-    #     arr = StaticArray(len(case))
-    #     for i, value in enumerate(case):
-    #         arr[i] = value
-    #     print(arr if len(case) < 50 else 'Started sorting large array')
-    #     result = count_sort(arr)
-    #     print(result if len(case) < 50 else 'Finished sorting large array')
-    #
+
+
+    print('\n# count_sort example 1')
+    test_cases = (
+        [1, 2, 4, 3, 5], [5, 4, 3, 2, 1], [0, -5, -3, -4, -2, -1, 0],
+        [-3, -2, -1, 0, 1, 2, 3], [1, 2, 3, 4, 3, 2, 1, 5, 5, 2, 3, 1],
+        [random.randrange(-499, 499) for _ in range(1_000_000)]
+    )
+    for case in test_cases:
+        arr = StaticArray(len(case))
+        for i, value in enumerate(case):
+            arr[i] = value
+        print(arr if len(case) < 50 else 'Started sorting large array')
+        result = count_sort(arr)
+        print(result if len(case) < 50 else 'Finished sorting large array')
+
     #
     # print('\n# sa_intersection example 1')
     # test_cases = (
