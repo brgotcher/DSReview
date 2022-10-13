@@ -232,9 +232,50 @@ def count_sort(arr: StaticArray) -> StaticArray:
 def sa_intersection(arr1: StaticArray, arr2: StaticArray, arr3: StaticArray) \
         -> StaticArray:
     """
-    TODO: Write this implementation
+    take 3 arrays and return a new array consisting only of values
+    found in all 3
     """
-    pass
+    size1 = arr1.size()
+    size2 = arr2.size()
+    size3 = arr3.size()
+    max = size1
+    if size2 > max:
+        max = size2
+    if size3 > max:
+        max = size3
+
+    temp = StaticArray(max)
+    count = 0
+
+    i1 = 0
+    i2 = 0
+    i3 = 0
+
+    while True:
+        if arr1[i1] == arr2[i2] == arr[i3]:
+            temp[count] = arr1[i1]
+            count += 1
+            i1 += 1
+            i2 += 1
+            i3 += 1
+        elif arr1[i1] < arr2[i2] or arr1[i1] < arr3[i3]:
+            i1 += 1
+            if i1 >= size1:
+                break
+        elif arr2[i2] < arr1[i1] or arr2[i2] < arr3[i3]:
+            i2 += 1
+            if i2 >= size2:
+                break
+        elif arr3[i3] < arr1[i1] or arr3[i3] < arr2[i2]:
+            i3 += 1
+            if i3 >= size3:
+                break
+
+    final = StaticArray(count)
+    for i in range(count):
+        final[i] = temp[i]
+    return final
+
 
 
 # ------------------- PROBLEM 11 - SORTED SQUARES ---------------------------
@@ -405,35 +446,35 @@ if __name__ == "__main__":
     # print(arr)
 
 
-    print('\n# count_sort example 1')
-    test_cases = (
-        [1, 2, 4, 3, 5], [5, 4, 3, 2, 1], [0, -5, -3, -4, -2, -1, 0],
-        [-3, -2, -1, 0, 1, 2, 3], [1, 2, 3, 4, 3, 2, 1, 5, 5, 2, 3, 1],
-        [random.randrange(-499, 499) for _ in range(1_000_000)]
-    )
-    for case in test_cases:
-        arr = StaticArray(len(case))
-        for i, value in enumerate(case):
-            arr[i] = value
-        print(arr if len(case) < 50 else 'Started sorting large array')
-        result = count_sort(arr)
-        print(result if len(case) < 50 else 'Finished sorting large array')
-
-    #
-    # print('\n# sa_intersection example 1')
+    # print('\n# count_sort example 1')
     # test_cases = (
-    #     ([1, 2, 3], [3, 4, 5], [2, 3, 4]),
-    #     ([1, 2], [2, 4], [3, 4]),
-    #     ([1, 1, 2, 2, 5, 75], [1, 2, 2, 12, 75, 90], [-5, 2, 2, 2, 20, 75, 95])
+    #     [1, 2, 4, 3, 5], [5, 4, 3, 2, 1], [0, -5, -3, -4, -2, -1, 0],
+    #     [-3, -2, -1, 0, 1, 2, 3], [1, 2, 3, 4, 3, 2, 1, 5, 5, 2, 3, 1],
+    #     [random.randrange(-499, 499) for _ in range(1_000_000)]
     # )
     # for case in test_cases:
-    #     arr = []
-    #     for i, lst in enumerate(case):
-    #         arr.append(StaticArray(len(lst)))
-    #         for j, value in enumerate(sorted(lst)):
-    #             arr[i][j] = value
-    #     print(sa_intersection(arr[0], arr[1], arr[2]))
-    #
+    #     arr = StaticArray(len(case))
+    #     for i, value in enumerate(case):
+    #         arr[i] = value
+    #     print(arr if len(case) < 50 else 'Started sorting large array')
+    #     result = count_sort(arr)
+    #     print(result if len(case) < 50 else 'Finished sorting large array')
+
+
+    print('\n# sa_intersection example 1')
+    test_cases = (
+        ([1, 2, 3], [3, 4, 5], [2, 3, 4]),
+        ([1, 2], [2, 4], [3, 4]),
+        ([1, 1, 2, 2, 5, 75], [1, 2, 2, 12, 75, 90], [-5, 2, 2, 2, 20, 75, 95])
+    )
+    for case in test_cases:
+        arr = []
+        for i, lst in enumerate(case):
+            arr.append(StaticArray(len(lst)))
+            for j, value in enumerate(sorted(lst)):
+                arr[i][j] = value
+        print(sa_intersection(arr[0], arr[1], arr[2]))
+
     #
     # print('\n# sorted_squares example 1')
     # test_cases = (
