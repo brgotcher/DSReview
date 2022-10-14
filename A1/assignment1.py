@@ -235,16 +235,19 @@ def sa_intersection(arr1: StaticArray, arr2: StaticArray, arr3: StaticArray) \
     take 3 arrays and return a new array consisting only of values
     found in all 3
     """
+    # get sizes of the 3 arrays
     size1 = arr1.size()
     size2 = arr2.size()
     size3 = arr3.size()
-    max = size1
-    if size2 > max:
-        max = size2
-    if size3 > max:
-        max = size3
 
-    temp = StaticArray(max)
+    # get minimum array size to initialize temp array
+    min = size1
+    if size2 < min:
+        min = size2
+    if size3 < min:
+        min = size3
+
+    temp = StaticArray(min)
     count = 0
 
     i1 = 0
@@ -252,24 +255,35 @@ def sa_intersection(arr1: StaticArray, arr2: StaticArray, arr3: StaticArray) \
     i3 = 0
 
     while True:
-        if arr1[i1] == arr2[i2] == arr[i3]:
+        v1 = arr1[i1]
+        v2 = arr2[i2]
+        v3 = arr3[i3]
+        if arr1[i1] == arr2[i2] == arr3[i3]:
+            #print("found match at " + i1 + " " + i2 + " " + i3)
             temp[count] = arr1[i1]
             count += 1
             i1 += 1
             i2 += 1
             i3 += 1
+            if i1 >= size1 or i2 >= size2 or i3 >= size3:
+                break
         elif arr1[i1] < arr2[i2] or arr1[i1] < arr3[i3]:
+            #print("increment i1")
             i1 += 1
             if i1 >= size1:
                 break
         elif arr2[i2] < arr1[i1] or arr2[i2] < arr3[i3]:
+            #print("increment i2")
             i2 += 1
             if i2 >= size2:
                 break
         elif arr3[i3] < arr1[i1] or arr3[i3] < arr2[i2]:
+            #print("increment i3")
             i3 += 1
             if i3 >= size3:
                 break
+    if count == 0:
+        return StaticArray(1)
 
     final = StaticArray(count)
     for i in range(count):
@@ -283,9 +297,77 @@ def sa_intersection(arr1: StaticArray, arr2: StaticArray, arr3: StaticArray) \
 
 def sorted_squares(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    take an array as input and return a new array of the squares of the original
     """
-    pass
+    size = arr.size()
+    output = StaticArray(size)
+    # if all values in original array are positive, just put the squares in a new
+    # array and return it. If all values are negative, do the same but reverse
+    # the new array before returning
+    if arr[0] >= 0 or arr[size-1] <= 0:
+        for i in range(size):
+            output[i] = arr[i] ** 2
+        if arr[size-1] <= 0:
+            reverse(output)
+    # if both positive and negative values are present,
+    # create two separate arrays, reverse the negatives,
+    # then merge into final output
+    else:
+        negs = 0
+        pos = 0
+        temp_negative = StaticArray(size)
+        temp_positive = StaticArray(size)
+        for i in range(size):
+            if arr[i] < 0:
+                negs += 1
+                temp_negative[i] = arr[i] ** 2
+            else:
+                temp_positive[pos] = arr[i] ** 2
+                pos += 1
+
+        negative = StaticArray(negs)
+        for i in range(negs):
+            negative[i] = temp_negative[i]
+        reverse(negative)
+        positive = StaticArray(pos)
+        for i in range(pos):
+            positive[i] = temp_positive[i]
+
+        pi = 0
+        ni = 0
+        oi = 0
+
+        # while there are still values in both lists
+        # compare the two current values and put lowest
+        # in output list
+        while pi < positive.size() and ni < negative.size():
+            if positive[pi] < negative[ni]:
+                output[oi] = positive[pi]
+                oi += 1
+                pi += 1
+            else:
+                output[oi] = negative[ni]
+                oi += 1
+                ni += 1
+        # if end of negative list is reached first,
+        # add the rest of the positive values to output
+        while pi < positive.size():
+            output[oi] = positive[pi]
+            oi += 1
+            pi += 1
+
+        # if end of positive list is reached first, add
+        # the rest of the negative values to output
+        while ni < negative.size():
+            output[oi] = negative[ni]
+            oi += 1
+            ni += 1
+
+    return output
+
+
+
+
 
 
 # ------------------- PROBLEM 12 - ADD_NUMBERS ------------------------------
@@ -295,7 +377,7 @@ def add_numbers(arr1: StaticArray, arr2: StaticArray) -> StaticArray:
     """
     TODO: Write this implementation
     """
-    pass
+
 
 
 # ------------------- PROBLEM 13 - BALANCED_STRINGS -------------------------
@@ -461,36 +543,36 @@ if __name__ == "__main__":
     #     print(result if len(case) < 50 else 'Finished sorting large array')
 
 
-    print('\n# sa_intersection example 1')
-    test_cases = (
-        ([1, 2, 3], [3, 4, 5], [2, 3, 4]),
-        ([1, 2], [2, 4], [3, 4]),
-        ([1, 1, 2, 2, 5, 75], [1, 2, 2, 12, 75, 90], [-5, 2, 2, 2, 20, 75, 95])
-    )
-    for case in test_cases:
-        arr = []
-        for i, lst in enumerate(case):
-            arr.append(StaticArray(len(lst)))
-            for j, value in enumerate(sorted(lst)):
-                arr[i][j] = value
-        print(sa_intersection(arr[0], arr[1], arr[2]))
-
-    #
-    # print('\n# sorted_squares example 1')
+    # print('\n# sa_intersection example 1')
     # test_cases = (
-    #     [1, 2, 3, 4, 5],
-    #     [-5, -4, -3, -2, -1, 0],
-    #     [-3, -2, -2, 0, 1, 2, 3],
-    #     [random.randrange(-10_000, 10_000) for _ in range(1_000_000)]
+    #     ([1, 2, 3], [3, 4, 5], [2, 3, 4]),
+    #     ([1, 2], [2, 4], [3, 4]),
+    #     ([1, 1, 2, 2, 5, 75], [1, 2, 2, 12, 75, 90], [-5, 2, 2, 2, 20, 75, 95])
     # )
     # for case in test_cases:
-    #     arr = StaticArray(len(case))
-    #     for i, value in enumerate(sorted(case)):
-    #         arr[i] = value
-    #     print(arr if len(case) < 50 else 'Started sorting large array')
-    #     result = sorted_squares(arr)
-    #     print(result if len(case) < 50 else 'Finished sorting large array')
-    #
+    #     arr = []
+    #     for i, lst in enumerate(case):
+    #         arr.append(StaticArray(len(lst)))
+    #         for j, value in enumerate(sorted(lst)):
+    #             arr[i][j] = value
+    #     print(sa_intersection(arr[0], arr[1], arr[2]))
+
+
+    print('\n# sorted_squares example 1')
+    test_cases = (
+        [1, 2, 3, 4, 5],
+        [-5, -4, -3, -2, -1, 0],
+        [-3, -2, -2, 0, 1, 2, 3],
+        [random.randrange(-10_000, 10_000) for _ in range(1_000_000)]
+    )
+    for case in test_cases:
+        arr = StaticArray(len(case))
+        for i, value in enumerate(sorted(case)):
+            arr[i] = value
+        print(arr if len(case) < 50 else 'Started sorting large array')
+        result = sorted_squares(arr)
+        print(result if len(case) < 50 else 'Finished sorting large array')
+
     #
     # print('\n# add_numbers example 1')
     # test_cases = (
