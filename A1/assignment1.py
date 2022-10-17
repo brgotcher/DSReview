@@ -375,8 +375,47 @@ def sorted_squares(arr: StaticArray) -> StaticArray:
 
 def add_numbers(arr1: StaticArray, arr2: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    add digits of two static arrays into a 3rd array to hold the sum
     """
+    size1 = arr1.size()
+    size2 = arr2.size()
+    # make a temp array to hold a number the size of the larger array
+    # plus one more digit in case of a carried one
+    max = size1
+    if size2 > max:
+        max = size2
+    temp = StaticArray(max+1)
+
+    carry_one = False
+    for i in range(max):
+        sum = 0
+        if carry_one:
+            sum = 1
+            carry_one = False
+        # if both arrays still have digits to add
+        if size1 > i and size2 > i:
+            sum += arr1[size1 - (i+1)] + arr2[size2 - (i+1)]
+        # if arr1 is out of digits
+        elif size1 <= i:
+            sum += arr2[max - (i+1)]
+        # if arr2 is out of digits
+        elif size2 <= i:
+            sum += arr1[max - (i+1)]
+        # carry a one if needed
+        if sum >= 10:
+            carry_one = True
+            sum -= 10
+        temp[max-i] = sum
+    # after all digits are added, add a final carried one if needed
+    if carry_one:
+        temp[0] = 1
+        out = temp
+    else:
+        out = StaticArray(max)
+        for i in range(max):
+            out[i] = temp[i+1]
+    return out
+
 
 
 
@@ -558,39 +597,39 @@ if __name__ == "__main__":
     #     print(sa_intersection(arr[0], arr[1], arr[2]))
 
 
-    print('\n# sorted_squares example 1')
-    test_cases = (
-        [1, 2, 3, 4, 5],
-        [-5, -4, -3, -2, -1, 0],
-        [-3, -2, -2, 0, 1, 2, 3],
-        [random.randrange(-10_000, 10_000) for _ in range(1_000_000)]
-    )
-    for case in test_cases:
-        arr = StaticArray(len(case))
-        for i, value in enumerate(sorted(case)):
-            arr[i] = value
-        print(arr if len(case) < 50 else 'Started sorting large array')
-        result = sorted_squares(arr)
-        print(result if len(case) < 50 else 'Finished sorting large array')
-
-    #
-    # print('\n# add_numbers example 1')
+    # print('\n# sorted_squares example 1')
     # test_cases = (
-    #     ([1, 2, 3], [4, 5, 6]),
-    #     ([0], [2, 5]),
-    #     ([2, 0, 9, 0, 7], [1, 0, 8]),
-    #     ([9, 9, 9], [9, 9, 9, 9])
+    #     [1, 2, 3, 4, 5],
+    #     [-5, -4, -3, -2, -1, 0],
+    #     [-3, -2, -2, 0, 1, 2, 3],
+    #     [random.randrange(-10_000, 10_000) for _ in range(1_000_000)]
     # )
-    # for num1, num2 in test_cases:
-    #     n1 = StaticArray(len(num1))
-    #     n2 = StaticArray(len(num2))
-    #     for i, value in enumerate(num1):
-    #         n1[i] = value
-    #     for i, value in enumerate(num2):
-    #         n2[i] = value
-    #     print('Original nums:', n1, n2)
-    #     print('Sum: ', add_numbers(n1, n2))
-    #
+    # for case in test_cases:
+    #     arr = StaticArray(len(case))
+    #     for i, value in enumerate(sorted(case)):
+    #         arr[i] = value
+    #     print(arr if len(case) < 50 else 'Started sorting large array')
+    #     result = sorted_squares(arr)
+    #     print(result if len(case) < 50 else 'Finished sorting large array')
+
+
+    print('\n# add_numbers example 1')
+    test_cases = (
+        ([1, 2, 3], [4, 5, 6]),
+        ([0], [2, 5]),
+        ([2, 0, 9, 0, 7], [1, 0, 8]),
+        ([9, 9, 9], [9, 9, 9, 9])
+    )
+    for num1, num2 in test_cases:
+        n1 = StaticArray(len(num1))
+        n2 = StaticArray(len(num2))
+        for i, value in enumerate(num1):
+            n1[i] = value
+        for i, value in enumerate(num2):
+            n2[i] = value
+        print('Original nums:', n1, n2)
+        print('Sum: ', add_numbers(n1, n2))
+
     #
     # print('\n# balanced_strings example 1')
     # test_cases = (
