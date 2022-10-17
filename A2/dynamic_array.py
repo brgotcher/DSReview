@@ -97,13 +97,18 @@ class DynamicArray:
 
     def resize(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        create a new staticarray of specified size to replace
+        the self.data member
         """
+        # if the new_capacity is less than current cap, do nothing
         if new_capacity <= self.size:
             return
 
+        # create new staticarray that will become the new
+        # self.data
         temp = StaticArray(new_capacity)
 
+        # copy over existing values
         for i in range(self.size):
             temp[i] = self.data[i]
 
@@ -112,11 +117,14 @@ class DynamicArray:
 
     def append(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        add a new value to the dynamic array, resizing the
+        underlying staticarray if needed
         """
+        # resize if needed
         if self.size >= self.capacity:
             self.resize(self.capacity * 2)
 
+        # add the new value and increment the size data member
         self.data[self.size] = value
         self.size += 1
 
@@ -124,7 +132,19 @@ class DynamicArray:
         """
         TODO: Write this implementation
         """
-        pass
+        if index < 0 or index > self.size:
+            raise DynamicArrayException
+
+        if self.size >= self.capacity:
+            self.resize(self.capacity * 2)
+
+        self.size += 1
+        for i in range(self.size-1, index, -1):
+            self.data[i] = self.data[i-1]
+
+        self.data[index] = value
+
+
 
     def remove_at_index(self, index: int) -> None:
         """
@@ -169,85 +189,85 @@ class DynamicArray:
 # BASIC TESTING
 if __name__ == "__main__":
 
-    print("\n# resize - example 1")
-    da = DynamicArray()
-    print(da.size, da.capacity, da.data)
-    da.resize(8)
-    print(da.size, da.capacity, da.data)
-    da.resize(2)
-    print(da.size, da.capacity, da.data)
-    da.resize(0)
-    print(da.size, da.capacity, da.data)
-
-
-    print("\n# resize - example 2")
-    da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8])
-    print(da)
-    da.resize(20)
-    print(da)
-    da.resize(4)
-    print(da)
-
-
-    print("\n# append - example 1")
-    da = DynamicArray()
-    print(da.size, da.capacity, da.data)
-    da.append(1)
-    print(da.size, da.capacity, da.data)
-    print(da)
-
-
-    print("\n# append - example 2")
-    da = DynamicArray()
-    for i in range(9):
-        da.append(i + 101)
-        print(da)
-
-
-    print("\n# append - example 3")
-    da = DynamicArray()
-    for i in range(600):
-        da.append(i)
-    print(da.size)
-    print(da.capacity)
-
-    #
-    # print("\n# insert_at_index - example 1")
-    # da = DynamicArray([100])
-    # print(da)
-    # da.insert_at_index(0, 200)
-    # da.insert_at_index(0, 300)
-    # da.insert_at_index(0, 400)
-    # print(da)
-    # da.insert_at_index(3, 500)
-    # print(da)
-    # da.insert_at_index(1, 600)
-    # print(da)
-    #
-    #
-    # print("\n# insert_at_index example 2")
+    # print("\n# resize - example 1")
     # da = DynamicArray()
-    # try:
-    #     da.insert_at_index(-1, 100)
-    # except Exception as e:
-    #     print("Exception raised:", type(e))
-    # da.insert_at_index(0, 200)
-    # try:
-    #     da.insert_at_index(2, 300)
-    # except Exception as e:
-    #     print("Exception raised:", type(e))
+    # print(da.size, da.capacity, da.data)
+    # da.resize(8)
+    # print(da.size, da.capacity, da.data)
+    # da.resize(2)
+    # print(da.size, da.capacity, da.data)
+    # da.resize(0)
+    # print(da.size, da.capacity, da.data)
+
+
+    # print("\n# resize - example 2")
+    # da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8])
     # print(da)
-    #
-    # print("\n# insert at index example 3")
+    # da.resize(20)
+    # print(da)
+    # da.resize(4)
+    # print(da)
+
+
+    # print("\n# append - example 1")
     # da = DynamicArray()
-    # for i in range(1, 10):
-    #     index, value = i - 4, i * 10
-    #     try:
-    #         da.insert_at_index(index, value)
-    #     except Exception as e:
-    #         print("Cannot insert value", value, "at index", index)
+    # print(da.size, da.capacity, da.data)
+    # da.append(1)
+    # print(da.size, da.capacity, da.data)
     # print(da)
-    #
+
+
+    # print("\n# append - example 2")
+    # da = DynamicArray()
+    # for i in range(9):
+    #     da.append(i + 101)
+    #     print(da)
+
+
+    # print("\n# append - example 3")
+    # da = DynamicArray()
+    # for i in range(600):
+    #     da.append(i)
+    # print(da.size)
+    # print(da.capacity)
+
+
+    print("\n# insert_at_index - example 1")
+    da = DynamicArray([100])
+    print(da)
+    da.insert_at_index(0, 200)
+    da.insert_at_index(0, 300)
+    da.insert_at_index(0, 400)
+    print(da)
+    da.insert_at_index(3, 500)
+    print(da)
+    da.insert_at_index(1, 600)
+    print(da)
+
+
+    print("\n# insert_at_index example 2")
+    da = DynamicArray()
+    try:
+        da.insert_at_index(-1, 100)
+    except Exception as e:
+        print("Exception raised:", type(e))
+    da.insert_at_index(0, 200)
+    try:
+        da.insert_at_index(2, 300)
+    except Exception as e:
+        print("Exception raised:", type(e))
+    print(da)
+
+    print("\n# insert at index example 3")
+    da = DynamicArray()
+    for i in range(1, 10):
+        index, value = i - 4, i * 10
+        try:
+            da.insert_at_index(index, value)
+        except Exception as e:
+            print("Cannot insert value", value, "at index", index)
+    print(da)
+
     #
     # print("\n# remove_at_index - example 1")
     # da = DynamicArray([10, 20, 30, 40, 50, 60, 70, 80])
