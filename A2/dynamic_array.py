@@ -167,7 +167,11 @@ class DynamicArray:
         """
         TODO: Write this implementation
         """
-        return DynamicArray()
+        if start_index < 0 or start_index + size > self.size-1 or size < 0:
+            raise DynamicArrayException
+
+        if size == 0:
+            return DynamicArray(0)
 
     def merge(self, second_da: object) -> None:
         """
