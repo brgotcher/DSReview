@@ -210,9 +210,21 @@ class DynamicArray:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.size == 0:
+            if initializer is None:
+                return None
+            else:
+                return initializer
 
+        if initializer is not None:
+            total = reduce_func(initializer, self.data[0])
+        else:
+            total = self.data[0]
 
+        for i in range(1,self.size):
+            total = reduce_func(total, self.data[i])
+
+        return total
 
 
 
@@ -418,39 +430,39 @@ if __name__ == "__main__":
     #     print(da.map(lambda x: x(value)))
 
 
-    print("\n# filter example 1")
-    def filter_a(e):
-        return e > 10
-
-    da = DynamicArray([1, 5, 10, 15, 20, 25])
-    print(da)
-    result = da.filter(filter_a)
-    print(result)
-    print(da.filter(lambda x: (10 <= x <= 20)))
-
-
-    print("\n# filter example 2")
-    def is_long_word(word, length):
-        return len(word) > length
-
-    da = DynamicArray("This is a sentence with some long words".split())
-    print(da)
-    for length in [3, 4, 7]:
-        print(da.filter(lambda word: is_long_word(word, length)))
-
+    # print("\n# filter example 1")
+    # def filter_a(e):
+    #     return e > 10
     #
-    # print("\n# reduce example 1")
-    # values = [100, 5, 10, 15, 20, 25]
-    # da = DynamicArray(values)
+    # da = DynamicArray([1, 5, 10, 15, 20, 25])
     # print(da)
-    # print(da.reduce(lambda x, y: x + y ** 2))
-    # print(da.reduce(lambda x, y: x + y ** 2, -1))
+    # result = da.filter(filter_a)
+    # print(result)
+    # print(da.filter(lambda x: (10 <= x <= 20)))
     #
     #
-    # print("\n# reduce example 2")
-    # da = DynamicArray([100])
-    # print(da.reduce(lambda x, y: x + y ** 2))
-    # print(da.reduce(lambda x, y: x + y ** 2, -1))
-    # da.remove_at_index(0)
-    # print(da.reduce(lambda x, y: x + y ** 2))
-    # print(da.reduce(lambda x, y: x + y ** 2, -1))
+    # print("\n# filter example 2")
+    # def is_long_word(word, length):
+    #     return len(word) > length
+    #
+    # da = DynamicArray("This is a sentence with some long words".split())
+    # print(da)
+    # for length in [3, 4, 7]:
+    #     print(da.filter(lambda word: is_long_word(word, length)))
+
+
+    print("\n# reduce example 1")
+    values = [100, 5, 10, 15, 20, 25]
+    da = DynamicArray(values)
+    print(da)
+    print(da.reduce(lambda x, y: x + y ** 2))
+    print(da.reduce(lambda x, y: x + y ** 2, -1))
+
+
+    print("\n# reduce example 2")
+    da = DynamicArray([100])
+    print(da.reduce(lambda x, y: x + y ** 2))
+    print(da.reduce(lambda x, y: x + y ** 2, -1))
+    da.remove_at_index(0)
+    print(da.reduce(lambda x, y: x + y ** 2))
+    print(da.reduce(lambda x, y: x + y ** 2, -1))
