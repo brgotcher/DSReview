@@ -52,13 +52,15 @@ class Queue:
         """
         TODO: Write this implementation
         """
-        pass
+        self.da.append(value)
 
     def dequeue(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        out = self.da.get_at_index(0)
+        self.da.remove_at_index(0)
+        return out
 
 
 
