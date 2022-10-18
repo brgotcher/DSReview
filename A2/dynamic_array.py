@@ -145,8 +145,6 @@ class DynamicArray:
 
         self.data[index] = value
 
-
-
     def remove_at_index(self, index: int) -> None:
         """
         remove the value at the index, shift others to fill spot
@@ -165,7 +163,8 @@ class DynamicArray:
 
     def slice(self, start_index: int, size: int) -> object:
         """
-        TODO: Write this implementation
+        take a start index and size, return a new dynamicarray consisting of
+        the section of the original dynamicarray
         """
 
         if size == 0:
@@ -182,15 +181,19 @@ class DynamicArray:
 
     def merge(self, second_da: object) -> None:
         """
-        TODO: Write this implementation
+        append second_da to the end of the original dynamic array
         """
-        pass
+        for i in range(second_da.size):
+            self.append(second_da[i])
 
     def map(self, map_func) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        out = DynamicArray()
+        for i in range(self.size):
+            out.append(map_func(self.data[i]))
+        return out
 
     def filter(self, filter_func) -> object:
         """
@@ -345,26 +348,26 @@ if __name__ == "__main__":
     #     print(da)
 
 
-    print("\n# slice example 1")
-    da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    da_slice = da.slice(1, 3)
-    print(da, da_slice, sep="\n")
-    da_slice.remove_at_index(0)
-    print(da, da_slice, sep="\n")
-
-
-    print("\n# slice example 2")
-    da = DynamicArray([10, 11, 12, 13, 14, 15, 16])
-    print("SOURCE:", da)
-    slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1), (6, -1)]
-    for i, cnt in slices:
-        print("Slice", i, "/", cnt, end="")
-        try:
-            print(" --- OK: ", da.slice(i, cnt))
-        except:
-            print(" --- exception occurred.")
-
+    # print("\n# slice example 1")
+    # da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    # da_slice = da.slice(1, 3)
+    # print(da, da_slice, sep="\n")
+    # da_slice.remove_at_index(0)
+    # print(da, da_slice, sep="\n")
     #
+    #
+    # print("\n# slice example 2")
+    # da = DynamicArray([10, 11, 12, 13, 14, 15, 16])
+    # print("SOURCE:", da)
+    # slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1), (6, -1)]
+    # for i, cnt in slices:
+    #     print("Slice", i, "/", cnt, end="")
+    #     try:
+    #         print(" --- OK: ", da.slice(i, cnt))
+    #     except:
+    #         print(" --- exception occurred.")
+
+
     # print("\n# merge example 1")
     # da = DynamicArray([1, 2, 3, 4, 5])
     # da2 = DynamicArray([10, 11, 12, 13])
@@ -383,13 +386,13 @@ if __name__ == "__main__":
     # print(da2)
     # da3.merge(da)
     # print(da3)
-    #
+
     #
     # print("\n# map example 1")
     # da = DynamicArray([1, 5, 10, 15, 20, 25])
     # print(da)
     # print(da.map(lambda x: x ** 2))
-    #
+
     # print("\n# map example 2")
     #
     #
@@ -408,28 +411,28 @@ if __name__ == "__main__":
     # da = DynamicArray([plus_one, double, square, cube])
     # for value in [1, 10, 20]:
     #     print(da.map(lambda x: x(value)))
-    #
-    #
-    # print("\n# filter example 1")
-    # def filter_a(e):
-    #     return e > 10
-    #
-    # da = DynamicArray([1, 5, 10, 15, 20, 25])
-    # print(da)
-    # result = da.filter(filter_a)
-    # print(result)
-    # print(da.filter(lambda x: (10 <= x <= 20)))
-    #
-    #
-    # print("\n# filter example 2")
-    # def is_long_word(word, length):
-    #     return len(word) > length
-    #
-    # da = DynamicArray("This is a sentence with some long words".split())
-    # print(da)
-    # for length in [3, 4, 7]:
-    #     print(da.filter(lambda word: is_long_word(word, length)))
-    #
+
+
+    print("\n# filter example 1")
+    def filter_a(e):
+        return e > 10
+
+    da = DynamicArray([1, 5, 10, 15, 20, 25])
+    print(da)
+    result = da.filter(filter_a)
+    print(result)
+    print(da.filter(lambda x: (10 <= x <= 20)))
+
+
+    print("\n# filter example 2")
+    def is_long_word(word, length):
+        return len(word) > length
+
+    da = DynamicArray("This is a sentence with some long words".split())
+    print(da)
+    for length in [3, 4, 7]:
+        print(da.filter(lambda word: is_long_word(word, length)))
+
     #
     # print("\n# reduce example 1")
     # values = [100, 5, 10, 15, 20, 25]
