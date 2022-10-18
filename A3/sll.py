@@ -183,27 +183,78 @@ class LinkedList:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            raise SLLException
+
+        if self.head.next.next == self.tail:
+            return self.head.next.value
+
+        return self.rec_get_back(self.head.next)
+
+    def rec_get_back(self, node):
+        if node.next == self.tail:
+            return node.value
+        else:
+            return self.rec_get_back(node.next)
 
     def remove(self, value: object) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            return False
+
+        return self.rec_remove(value, self.head)
+
+    def rec_remove(self, value, node):
+        if node.next == self.tail:
+            return False
+
+        if node.next.value == value:
+            node.next = node.next.next
+            return True
+        else:
+            return self.rec_remove(value, node.next)
 
     def count(self, value: object) -> int:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            return 0
+
+        return self.rec_count(value, self.head.next, 0)
+
+    def rec_count(self, value, node, count):
+        if node.value == value:
+            count += 1
+
+        if node.next == self.tail:
+            return count
+        else:
+            return self.rec_count(value, node.next, count)
 
     def slice(self, start_index: int, size: int) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if start_index < 0 or start_index + size > self.length():
+            raise SLLException
 
+        if size == 0:
+            return LinkedList()
 
+        return self.rec_slice(start_index, size, self.head.next, 0, LinkedList())
+
+    def rec_slice(self, start_index, size, node, current, output):
+        if current == start_index + (size-1):
+            output.add_back(node.value)
+            return output
+
+        if start_index <= current < start_index + size:
+            output.add_back(node.value)
+
+        return self.rec_slice(start_index, size, node.next, current+1, output)
 
 
 
@@ -281,19 +332,19 @@ if __name__ == '__main__':
     # print(list)
 
 
-    print('\n# get_front example 1')
-    list = LinkedList(['A', 'B'])
-    print(list.get_front())
-    print(list.get_front())
-    list.remove_front()
-    print(list.get_front())
-    list.remove_back()
-    try:
-        print(list.get_front())
-    except Exception as e:
-        print(type(e))
+    # print('\n# get_front example 1')
+    # list = LinkedList(['A', 'B'])
+    # print(list.get_front())
+    # print(list.get_front())
+    # list.remove_front()
+    # print(list.get_front())
+    # list.remove_back()
+    # try:
+    #     print(list.get_front())
+    # except Exception as e:
+    #     print(type(e))
 
-    #
+
     # print('\n# get_back example 1')
     # list = LinkedList([1, 2, 3])
     # list.add_back(4)
@@ -301,36 +352,36 @@ if __name__ == '__main__':
     # list.remove_back()
     # print(list)
     # print(list.get_back())
-    #
-    #
+
+
     # print('\n# remove example 1')
     # list = LinkedList([1, 2, 3, 1, 2, 3, 1, 2, 3])
     # print(list)
     # for value in [7, 3, 3, 3, 3]:
     #     print(list.remove(value), list.length(), list)
-    #
-    #
+
+
     # print('\n# count example 1')
     # list = LinkedList([1, 2, 3, 1, 2, 2])
     # print(list, list.count(1), list.count(2), list.count(3), list.count(4))
-    #
-    #
-    # print('\n# slice example 1')
-    # list = LinkedList([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    # ll_slice = list.slice(1, 3)
-    # print(list, ll_slice, sep="\n")
-    # ll_slice.remove_at_index(0)
-    # print(list, ll_slice, sep="\n")
-    #
-    #
-    # print('\n# slice example 2')
-    # list = LinkedList([10, 11, 12, 13, 14, 15, 16])
-    # print("SOURCE:", list)
-    # slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1)]
-    # for index, size in slices:
-    #     print("Slice", index, "/", size, end="")
-    #     try:
-    #         print(" --- OK: ", list.slice(index, size))
-    #     except:
-    #         print(" --- exception occurred.")
+
+
+    print('\n# slice example 1')
+    list = LinkedList([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    ll_slice = list.slice(1, 3)
+    print(list, ll_slice, sep="\n")
+    ll_slice.remove_at_index(0)
+    print(list, ll_slice, sep="\n")
+
+
+    print('\n# slice example 2')
+    list = LinkedList([10, 11, 12, 13, 14, 15, 16])
+    print("SOURCE:", list)
+    slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1)]
+    for index, size in slices:
+        print("Slice", index, "/", size, end="")
+        try:
+            print(" --- OK: ", list.slice(index, size))
+        except:
+            print(" --- exception occurred.")
 
