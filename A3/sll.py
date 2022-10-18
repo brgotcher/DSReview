@@ -128,25 +128,56 @@ class LinkedList:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            raise SLLException
+
+        self.head.next = self.head.next.next
 
     def remove_back(self) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            raise SLLException
+
+        self.rec_remove_back(self.head)
+
+    def rec_remove_back(self, node):
+        if node.next.next == self.tail:
+            node.next = self.tail
+        else:
+            self.rec_remove_back(node.next)
 
     def remove_at_index(self, index: int) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if index < 0 or self.head.next == self.tail:
+            raise SLLException
+
+        if index == 0:
+            self.head.next = self.head.next.next
+
+        else:
+            self.rec_remove_at_index(index, self.head.next, 0)
+
+    def rec_remove_at_index(self, index, node, current):
+        if node.next == self.tail:
+            raise SLLException
+
+        if index == current+1:
+            node.next = node.next.next
+        else:
+            self.rec_remove_at_index(index, node.next, current+1)
 
     def get_front(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.head.next == self.tail:
+            raise SLLException
+
+        return self.head.next.value
 
     def get_back(self) -> object:
         """
@@ -197,18 +228,18 @@ if __name__ == '__main__':
     # print(list)
 
 
-    print('\n# insert_at_index example 1')
-    list = LinkedList()
-    test_cases = [(0, 'A'), (0, 'B'), (1, 'C'), (3, 'D'), (-1, 'E'), (5, 'F')]
-    for index, value in test_cases:
-        print('Insert of', value, 'at', index, ': ', end='')
-        try:
-            list.insert_at_index(index, value)
-            print(list)
-        except Exception as e:
-            print(type(e))
+    # print('\n# insert_at_index example 1')
+    # list = LinkedList()
+    # test_cases = [(0, 'A'), (0, 'B'), (1, 'C'), (3, 'D'), (-1, 'E'), (5, 'F')]
+    # for index, value in test_cases:
+    #     print('Insert of', value, 'at', index, ': ', end='')
+    #     try:
+    #         list.insert_at_index(index, value)
+    #         print(list)
+    #     except Exception as e:
+    #         print(type(e))
 
-    #
+
     # print('\n# remove_front example 1')
     # list = LinkedList([1, 2])
     # print(list)
@@ -218,8 +249,8 @@ if __name__ == '__main__':
     #         print('Successful removal', list)
     #     except Exception as e:
     #         print(type(e))
-    #
-    #
+
+
     # print('\n# remove_back example 1')
     # list = LinkedList()
     # try:
@@ -235,8 +266,8 @@ if __name__ == '__main__':
     # print(list)
     # list.remove_back()
     # print(list)
-    #
-    #
+
+
     # print('\n# remove_at_index example 1')
     # list = LinkedList([1, 2, 3, 4, 5, 6])
     # print(list)
@@ -248,20 +279,20 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     # print(list)
-    #
-    #
-    # print('\n# get_front example 1')
-    # list = LinkedList(['A', 'B'])
-    # print(list.get_front())
-    # print(list.get_front())
-    # list.remove_front()
-    # print(list.get_front())
-    # list.remove_back()
-    # try:
-    #     print(list.get_front())
-    # except Exception as e:
-    #     print(type(e))
-    #
+
+
+    print('\n# get_front example 1')
+    list = LinkedList(['A', 'B'])
+    print(list.get_front())
+    print(list.get_front())
+    list.remove_front()
+    print(list.get_front())
+    list.remove_back()
+    try:
+        print(list.get_front())
+    except Exception as e:
+        print(type(e))
+
     #
     # print('\n# get_back example 1')
     # list = LinkedList([1, 2, 3])
