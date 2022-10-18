@@ -53,6 +53,8 @@ class MaxStack:
         """
         TODO: Write this implementation
         """
+        if self.sll_max.is_empty() or self.sll_max.get_front() <= value:
+            self.sll_max.add_front(value)
         self.sll_val.add_front(value)
 
     def pop(self) -> object:
@@ -61,6 +63,8 @@ class MaxStack:
         """
         out = self.sll_val.get_front()
         self.sll_val.remove_front()
+        if not self.sll_max.is_empty() and self.sll_max.get_front() == out:
+            self.sll_max.remove_front()
         return out
 
     def top(self) -> object:
@@ -75,7 +79,7 @@ class MaxStack:
         """
         TODO: Write this implementation
         """
-        pass
+        return self.sll_max.get_front()
 
 
 # BASIC TESTING
@@ -117,21 +121,21 @@ if __name__ == "__main__":
     print(s.top())
     print(s.top())
     print(s)
-    #
-    # print('\n# get_max example 1')
-    # s = MaxStack()
-    # for value in [1, -20, 15, 21, 21, 40, 50]:
-    #     print(s, ' ', end='')
-    #     try:
-    #         print(s.get_max())
-    #     except Exception as e:
-    #         print(type(e))
-    #     s.push(value)
-    # while not s.is_empty():
-    #     print(s.size(), end='')
-    #     print(' Pop value:', s.pop(), ' get_max after: ', end='')
-    #     try:
-    #         print(s.get_max())
-    #     except Exception as e:
-    #         print(type(e))
+
+    print('\n# get_max example 1')
+    s = MaxStack()
+    for value in [1, -20, 15, 21, 21, 40, 50]:
+        print(s, ' ', end='')
+        try:
+            print(s.get_max())
+        except Exception as e:
+            print(type(e))
+        s.push(value)
+    while not s.is_empty():
+        print(s.size(), end='')
+        print(' Pop value:', s.pop(), ' get_max after: ', end='')
+        try:
+            print(s.get_max())
+        except Exception as e:
+            print(type(e))
 
