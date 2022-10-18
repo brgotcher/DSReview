@@ -167,11 +167,18 @@ class DynamicArray:
         """
         TODO: Write this implementation
         """
-        if start_index < 0 or start_index + size > self.size-1 or size < 0:
-            raise DynamicArrayException
 
         if size == 0:
-            return DynamicArray(0)
+            return DynamicArray()
+
+        if start_index < 0 or start_index + size > self.size or size < 0:
+            raise DynamicArrayException
+
+        out = DynamicArray()
+        for i in range(size):
+            out.insert_at_index(i, self.data[i+start_index])
+
+        return out
 
     def merge(self, second_da: object) -> None:
         """
@@ -284,79 +291,79 @@ if __name__ == "__main__":
     # print(da)
 
 
-    print("\n# remove_at_index - example 1")
-    da = DynamicArray([10, 20, 30, 40, 50, 60, 70, 80])
-    print(da)
-    da.remove_at_index(0)
-    print(da)
-    da.remove_at_index(6)
-    print(da)
-    da.remove_at_index(2)
-    print(da)
-
-
-    print("\n# remove_at_index - example 2")
-    da = DynamicArray([1024])
-    print(da)
-    for i in range(17):
-        da.insert_at_index(i, i)
-    print(da.size, da.capacity)
-    for i in range(16, -1, -1):
-        da.remove_at_index(0)
-    print(da)
-
-
-    print("\n# remove_at_index - example 3")
-    da = DynamicArray()
-    print(da.size, da.capacity)
-    [da.append(1) for i in range(100)]  # step 1 - add 100 elements
-    print(da.size, da.capacity)
-    [da.remove_at_index(0) for i in range(68)]  # step 2 - remove 68 elements
-    print(da.size, da.capacity)
-    da.remove_at_index(0)  # step 3 - remove 1 element
-    print(da.size, da.capacity)
-    da.remove_at_index(0)  # step 4 - remove 1 element
-    print(da.size, da.capacity)
-    [da.remove_at_index(0) for i in range(14)]  # step 5 - remove 14 elements
-    print(da.size, da.capacity)
-    da.remove_at_index(0)  # step 6 - remove 1 element
-    print(da.size, da.capacity)
-    da.remove_at_index(0)  # step 7 - remove 1 element
-    print(da.size, da.capacity)
-
-    for i in range(14):
-        print("Before remove_at_index(): ", da.size, da.capacity, end="")
-        da.remove_at_index(0)
-        print(" After remove_at_index(): ", da.size, da.capacity)
-
-
-    print("\n# remove at index - example 4")
-    da = DynamicArray([1, 2, 3, 4, 5])
-    print(da)
-    for _ in range(5):
-        da.remove_at_index(0)
-        print(da)
-
-    #
-    # print("\n# slice example 1")
-    # da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    # da_slice = da.slice(1, 3)
-    # print(da, da_slice, sep="\n")
-    # da_slice.remove_at_index(0)
-    # print(da, da_slice, sep="\n")
+    # print("\n# remove_at_index - example 1")
+    # da = DynamicArray([10, 20, 30, 40, 50, 60, 70, 80])
+    # print(da)
+    # da.remove_at_index(0)
+    # print(da)
+    # da.remove_at_index(6)
+    # print(da)
+    # da.remove_at_index(2)
+    # print(da)
     #
     #
-    # print("\n# slice example 2")
-    # da = DynamicArray([10, 11, 12, 13, 14, 15, 16])
-    # print("SOURCE:", da)
-    # slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1), (6, -1)]
-    # for i, cnt in slices:
-    #     print("Slice", i, "/", cnt, end="")
-    #     try:
-    #         print(" --- OK: ", da.slice(i, cnt))
-    #     except:
-    #         print(" --- exception occurred.")
+    # print("\n# remove_at_index - example 2")
+    # da = DynamicArray([1024])
+    # print(da)
+    # for i in range(17):
+    #     da.insert_at_index(i, i)
+    # print(da.size, da.capacity)
+    # for i in range(16, -1, -1):
+    #     da.remove_at_index(0)
+    # print(da)
     #
+    #
+    # print("\n# remove_at_index - example 3")
+    # da = DynamicArray()
+    # print(da.size, da.capacity)
+    # [da.append(1) for i in range(100)]  # step 1 - add 100 elements
+    # print(da.size, da.capacity)
+    # [da.remove_at_index(0) for i in range(68)]  # step 2 - remove 68 elements
+    # print(da.size, da.capacity)
+    # da.remove_at_index(0)  # step 3 - remove 1 element
+    # print(da.size, da.capacity)
+    # da.remove_at_index(0)  # step 4 - remove 1 element
+    # print(da.size, da.capacity)
+    # [da.remove_at_index(0) for i in range(14)]  # step 5 - remove 14 elements
+    # print(da.size, da.capacity)
+    # da.remove_at_index(0)  # step 6 - remove 1 element
+    # print(da.size, da.capacity)
+    # da.remove_at_index(0)  # step 7 - remove 1 element
+    # print(da.size, da.capacity)
+    #
+    # for i in range(14):
+    #     print("Before remove_at_index(): ", da.size, da.capacity, end="")
+    #     da.remove_at_index(0)
+    #     print(" After remove_at_index(): ", da.size, da.capacity)
+    #
+    #
+    # print("\n# remove at index - example 4")
+    # da = DynamicArray([1, 2, 3, 4, 5])
+    # print(da)
+    # for _ in range(5):
+    #     da.remove_at_index(0)
+    #     print(da)
+
+
+    print("\n# slice example 1")
+    da = DynamicArray([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    da_slice = da.slice(1, 3)
+    print(da, da_slice, sep="\n")
+    da_slice.remove_at_index(0)
+    print(da, da_slice, sep="\n")
+
+
+    print("\n# slice example 2")
+    da = DynamicArray([10, 11, 12, 13, 14, 15, 16])
+    print("SOURCE:", da)
+    slices = [(0, 7), (-1, 7), (0, 8), (2, 3), (5, 0), (5, 3), (6, 1), (6, -1)]
+    for i, cnt in slices:
+        print("Slice", i, "/", cnt, end="")
+        try:
+            print(" --- OK: ", da.slice(i, cnt))
+        except:
+            print(" --- exception occurred.")
+
     #
     # print("\n# merge example 1")
     # da = DynamicArray([1, 2, 3, 4, 5])
