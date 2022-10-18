@@ -52,19 +52,27 @@ class Stack:
         """
         TODO: Write this implementation
         """
-        pass
+        self.da.append(value)
 
     def pop(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.size() == 0:
+            raise StackException
+
+        out = self.da.get_at_index(self.size()-1)
+        self.da.remove_at_index(self.size() - 1)
+        return out
 
     def top(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.size() == 0:
+            raise StackException
+
+        return self.da.get_at_index(self.size() - 1)
 
 
 
