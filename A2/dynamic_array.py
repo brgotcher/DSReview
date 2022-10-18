@@ -199,7 +199,12 @@ class DynamicArray:
         """
         TODO: Write this implementation
         """
-        pass
+        out = DynamicArray()
+
+        for i in range(self.size):
+            if filter_func(self.data[i]):
+                out.append(self.data[i])
+        return out
 
     def reduce(self, reduce_func, initializer=None) -> object:
         """
