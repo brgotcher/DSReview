@@ -40,34 +40,52 @@ class Bag:
 
     def add(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        add an object to the bag
         """
-        pass
+        self.da.append(value)
 
     def remove(self, value: object) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        for i in range(self.size()):
+            if self.da[i] == value:
+                self.da.remove_at_index(i)
+                return True
+        return False
 
     def count(self, value: object) -> int:
         """
         TODO: Write this implementation
         """
-        pass
+        count = 0
+        for i in range(self.size()):
+            if self.da[i] == value:
+                count += 1
+        return count
 
     def clear(self) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        self.da = DynamicArray()
 
     def equal(self, second_bag: object) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.size() != second_bag.size():
+            return False
 
+        if self.size() == 0 and second_bag.size() == 0:
+            return True
+
+        for i in range(self.size()):
+            val = self.da[i]
+            if self.count(val) != second_bag.count(val):
+                return False
+
+        return True
 
 
 
