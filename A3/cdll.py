@@ -158,7 +158,7 @@ class CircularList:
 
     def remove_back(self) -> None:
         """
-        TODO: Write this implementation
+        remove the last node before the sentinel
         """
         if self.is_empty():
             raise CDLLException
@@ -168,21 +168,42 @@ class CircularList:
 
     def remove_at_index(self, index: int) -> None:
         """
-        TODO: Write this implementation
+        use a recursive helper to remove the node
+        at the specified index
         """
-        pass
+        if index < 0 or index > self.length()-1:
+            raise CDLLException
+
+        if index == 0:
+            self.remove_front()
+
+        else:
+            self.rec_remove_at_index(index, 0, self.sentinel.next)
+
+    def rec_remove_at_index(self, index, current, node):
+        if current == index - 1:
+            node.next = node.next.next
+            node.next.prev = node
+        else:
+            self.rec_remove_at_index(index, current+1, node.next)
 
     def get_front(self) -> object:
         """
-        TODO: Write this implementation
+        return the value of the first node after the sentinel
         """
-        pass
+        if self.is_empty():
+            raise CDLLException
+
+        return self.sentinel.next.value
 
     def get_back(self) -> object:
         """
-        TODO: Write this implementation
+        return the value of the last node before the sentinel
         """
-        pass
+        if self.is_empty():
+            raise CDLLException
+
+        return self.sentinel.prev.value
 
     def remove(self, value: object) -> bool:
         """
@@ -268,32 +289,32 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    print('\n# remove_front example 1')
-    lst = CircularList([1, 2])
-    print(lst)
-    for i in range(3):
-        try:
-            lst.remove_front()
-            print('Successful removal', lst)
-        except Exception as e:
-            print(type(e))
-
-    print('\n# remove_back example 1')
-    lst = CircularList()
-    try:
-        lst.remove_back()
-    except Exception as e:
-        print(type(e))
-    lst.add_front('Z')
-    lst.remove_back()
-    print(lst)
-    lst.add_front('Y')
-    lst.add_back('Z')
-    lst.add_front('X')
-    print(lst)
-    lst.remove_back()
-    print(lst)
+    # print('\n# remove_front example 1')
+    # lst = CircularList([1, 2])
+    # print(lst)
+    # for i in range(3):
+    #     try:
+    #         lst.remove_front()
+    #         print('Successful removal', lst)
+    #     except Exception as e:
+    #         print(type(e))
     #
+    # print('\n# remove_back example 1')
+    # lst = CircularList()
+    # try:
+    #     lst.remove_back()
+    # except Exception as e:
+    #     print(type(e))
+    # lst.add_front('Z')
+    # lst.remove_back()
+    # print(lst)
+    # lst.add_front('Y')
+    # lst.add_back('Z')
+    # lst.add_front('X')
+    # print(lst)
+    # lst.remove_back()
+    # print(lst)
+
     # print('\n# remove_at_index example 1')
     # lst = CircularList([1, 2, 3, 4, 5, 6])
     # print(lst)
@@ -305,27 +326,27 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     # print(lst)
-    #
-    # print('\n# get_front example 1')
-    # lst = CircularList(['A', 'B'])
-    # print(lst.get_front())
-    # print(lst.get_front())
-    # lst.remove_front()
-    # print(lst.get_front())
-    # lst.remove_back()
-    # try:
-    #     print(lst.get_front())
-    # except Exception as e:
-    #     print(type(e))
-    #
-    # print('\n# get_back example 1')
-    # lst = CircularList([1, 2, 3])
-    # lst.add_back(4)
-    # print(lst.get_back())
-    # lst.remove_back()
-    # print(lst)
-    # print(lst.get_back())
-    #
+
+    print('\n# get_front example 1')
+    lst = CircularList(['A', 'B'])
+    print(lst.get_front())
+    print(lst.get_front())
+    lst.remove_front()
+    print(lst.get_front())
+    lst.remove_back()
+    try:
+        print(lst.get_front())
+    except Exception as e:
+        print(type(e))
+
+    print('\n# get_back example 1')
+    lst = CircularList([1, 2, 3])
+    lst.add_back(4)
+    print(lst.get_back())
+    lst.remove_back()
+    print(lst)
+    print(lst.get_back())
+
     # print('\n# remove example 1')
     # lst = CircularList([1, 2, 3, 1, 2, 3, 1, 2, 3])
     # print(lst)
