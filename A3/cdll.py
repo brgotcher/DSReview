@@ -207,15 +207,40 @@ class CircularList:
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        find and remove a node with the specified value
+        if found and removed, return True, if not, return False
         """
-        pass
+        if self.is_empty():
+            return False
+
+        return self.rec_remove(value, self.sentinel.next)
+
+    def rec_remove(self, value, node):
+        if node.value == value:
+            node.prev.next = node.next
+            node.next.prev = node.prev
+            return True
+        elif node.next == self.sentinel:
+            return False
+        else:
+            return self.rec_remove(value, node.next)
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        count nodes in the list with the specified value
         """
-        pass
+        if self.is_empty():
+            return 0
+
+        return self.rec_count(value, self.sentinel.next, 0)
+
+    def rec_count(self, value, node, count):
+        if node == self.sentinel:
+            return count
+
+        if node.value == value:
+            count += 1
+        return self.rec_count(value, node.next, count)
 
     def swap_pairs(self, index1: int, index2: int) -> None:
         """
@@ -327,36 +352,36 @@ if __name__ == '__main__':
     #         print(type(e))
     # print(lst)
 
-    print('\n# get_front example 1')
-    lst = CircularList(['A', 'B'])
-    print(lst.get_front())
-    print(lst.get_front())
-    lst.remove_front()
-    print(lst.get_front())
-    lst.remove_back()
-    try:
-        print(lst.get_front())
-    except Exception as e:
-        print(type(e))
-
-    print('\n# get_back example 1')
-    lst = CircularList([1, 2, 3])
-    lst.add_back(4)
-    print(lst.get_back())
-    lst.remove_back()
-    print(lst)
-    print(lst.get_back())
+    # print('\n# get_front example 1')
+    # lst = CircularList(['A', 'B'])
+    # print(lst.get_front())
+    # print(lst.get_front())
+    # lst.remove_front()
+    # print(lst.get_front())
+    # lst.remove_back()
+    # try:
+    #     print(lst.get_front())
+    # except Exception as e:
+    #     print(type(e))
+    #
+    # print('\n# get_back example 1')
+    # lst = CircularList([1, 2, 3])
+    # lst.add_back(4)
+    # print(lst.get_back())
+    # lst.remove_back()
+    # print(lst)
+    # print(lst.get_back())
 
     # print('\n# remove example 1')
     # lst = CircularList([1, 2, 3, 1, 2, 3, 1, 2, 3])
     # print(lst)
     # for value in [7, 3, 3, 3, 3]:
     #     print(lst.remove(value), lst.length(), lst)
-    #
-    # print('\n# count example 1')
-    # lst = CircularList([1, 2, 3, 1, 2, 2])
-    # print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
-    #
+
+    print('\n# count example 1')
+    lst = CircularList([1, 2, 3, 1, 2, 2])
+    print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
+
     # print('\n# swap_pairs example 1')
     # lst = CircularList([0, 1, 2, 3, 4, 5, 6])
     # test_cases = ((0, 6), (0, 7), (-1, 6), (1, 5),
