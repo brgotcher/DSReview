@@ -104,33 +104,67 @@ class CircularList:
 
     def add_front(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        insert new node between sentinel and its 'next' node
         """
-        pass
+        new_node = DLNode(value)
+        new_node.prev = self.sentinel
+        new_node.next = self.sentinel.next
+        self.sentinel.next = new_node
+        new_node.next.prev = new_node
 
     def add_back(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        insert new node between sentinel and its 'prev' node
         """
-        pass
+        new_node = DLNode(value)
+        new_node.next = self.sentinel
+        new_node.prev = self.sentinel.prev
+        self.sentinel.prev = new_node
+        new_node.prev.next = new_node
 
     def insert_at_index(self, index: int, value: object) -> None:
         """
-        TODO: Write this implementation
+        insert new node at specified index
         """
-        pass
+        if index < 0 or index > self.length():
+            raise CDLLException
+
+        if index == 0:
+            self.add_front(value)
+
+        else:
+            self.rec_insert_at_index(index, value, 0, self.sentinel.next)
+
+    def rec_insert_at_index(self, index, value, current, node):
+        if current == index - 1:
+            new_node = DLNode(value)
+            new_node.next = node.next
+            new_node.prev = node
+            node.next = new_node
+            new_node.next.prev = new_node
+        else:
+            self.rec_insert_at_index(index, value, current+1, node.next)
+
 
     def remove_front(self) -> None:
         """
-        TODO: Write this implementation
+        remove the first node after the sentinel
         """
-        pass
+        if self.is_empty():
+            raise CDLLException
+
+        self.sentinel.next = self.sentinel.next.next
+        self.sentinel.next.prev = self.sentinel
 
     def remove_back(self) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            raise CDLLException
+
+        self.sentinel.prev = self.sentinel.prev.prev
+        self.sentinel.prev.next = self.sentinel
 
     def remove_at_index(self, index: int) -> None:
         """
@@ -214,7 +248,7 @@ if __name__ == '__main__':
     # lst.add_front('B')
     # lst.add_front('C')
     # print(lst)
-    #
+
     # print('\n# add_back example 1')
     # lst = CircularList()
     # print(lst)
@@ -222,7 +256,7 @@ if __name__ == '__main__':
     # lst.add_back('B')
     # lst.add_back('A')
     # print(lst)
-    #
+
     # print('\n# insert_at_index example 1')
     # lst = CircularList()
     # test_cases = [(0, 'A'), (0, 'B'), (1, 'C'), (3, 'D'), (-1, 'E'), (5, 'F')]
@@ -234,31 +268,31 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    # print('\n# remove_front example 1')
-    # lst = CircularList([1, 2])
-    # print(lst)
-    # for i in range(3):
-    #     try:
-    #         lst.remove_front()
-    #         print('Successful removal', lst)
-    #     except Exception as e:
-    #         print(type(e))
-    #
-    # print('\n# remove_back example 1')
-    # lst = CircularList()
-    # try:
-    #     lst.remove_back()
-    # except Exception as e:
-    #     print(type(e))
-    # lst.add_front('Z')
-    # lst.remove_back()
-    # print(lst)
-    # lst.add_front('Y')
-    # lst.add_back('Z')
-    # lst.add_front('X')
-    # print(lst)
-    # lst.remove_back()
-    # print(lst)
+    print('\n# remove_front example 1')
+    lst = CircularList([1, 2])
+    print(lst)
+    for i in range(3):
+        try:
+            lst.remove_front()
+            print('Successful removal', lst)
+        except Exception as e:
+            print(type(e))
+
+    print('\n# remove_back example 1')
+    lst = CircularList()
+    try:
+        lst.remove_back()
+    except Exception as e:
+        print(type(e))
+    lst.add_front('Z')
+    lst.remove_back()
+    print(lst)
+    lst.add_front('Y')
+    lst.add_back('Z')
+    lst.add_front('X')
+    print(lst)
+    lst.remove_back()
+    print(lst)
     #
     # print('\n# remove_at_index example 1')
     # lst = CircularList([1, 2, 3, 4, 5, 6])
