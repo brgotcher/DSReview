@@ -403,7 +403,13 @@ class CircularList:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            return
+        length = self.length()
+        if length < 3:
+            return
+
+
 
     def add_integer(self, num: int) -> None:
         """
