@@ -408,7 +408,16 @@ class CircularList:
         length = self.length()
         if length < 3:
             return
+        evens = CircularList()
+        odds = CircularList()
 
+        node = self.sentinel.next
+        for i in range(1, length):
+            if i % 2 == 0:
+                evens.add_front(node)
+            else:
+                odds.add_front(node)
+            node = node.next
 
 
     def add_integer(self, num: int) -> None:
