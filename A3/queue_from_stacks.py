@@ -53,35 +53,39 @@ class Queue:
         """
         TODO: Write this implementation
         """
-        pass
+        self.s1.push(value)
 
     def dequeue(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            raise QueueException
+        back = self.s1.sll_val.get_back()
+        self.s1.sll_val.remove_back()
+        return back
 
 # BASIC TESTING
 if __name__ == "__main__":
     pass
 
-    # print('\n# enqueue example 1')
-    # q = Queue()
-    # print(q)
-    # for value in [1, 2, 3, 4, 5]:
-    #     q.enqueue(value)
-    # print(q)
-    #
-    # print('\n# dequeue example 1')
-    # q = Queue()
-    # for value in [1, 2, 3, 4, 5]:
-    #     q.enqueue(value)
-    # print(q)
-    # for i in range(6):
-    #     try:
-    #         print(q.dequeue(), q)
-    #     except Exception as e:
-    #         print("No elements in queue", type(e))
+    print('\n# enqueue example 1')
+    q = Queue()
+    print(q)
+    for value in [1, 2, 3, 4, 5]:
+        q.enqueue(value)
+    print(q)
+
+    print('\n# dequeue example 1')
+    q = Queue()
+    for value in [1, 2, 3, 4, 5]:
+        q.enqueue(value)
+    print(q)
+    for i in range(6):
+        try:
+            print(q.dequeue(), q)
+        except Exception as e:
+            print("No elements in queue", type(e))
 
 
 
