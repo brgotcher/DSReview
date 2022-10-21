@@ -143,8 +143,7 @@ class CircularList:
             node.next = new_node
             new_node.next.prev = new_node
         else:
-            self.rec_insert_at_index(index, value, current+1, node.next)
-
+            self.rec_insert_at_index(index, value, current + 1, node.next)
 
     def remove_front(self) -> None:
         """
@@ -171,7 +170,7 @@ class CircularList:
         use a recursive helper to remove the node
         at the specified index
         """
-        if index < 0 or index > self.length()-1:
+        if index < 0 or index > self.length() - 1:
             raise CDLLException
 
         if index == 0:
@@ -185,7 +184,7 @@ class CircularList:
             node.next = node.next.next
             node.next.prev = node
         else:
-            self.rec_remove_at_index(index, current+1, node.next)
+            self.rec_remove_at_index(index, current + 1, node.next)
 
     def get_front(self) -> object:
         """
@@ -247,8 +246,8 @@ class CircularList:
         TODO: Write this implementation
         """
         length = self.length()
-        if index1 < 0 or index1 > length-1\
-                or index2 < 0 or index2 > length-1:
+        if index1 < 0 or index1 > length - 1 \
+                or index2 < 0 or index2 > length - 1:
             raise CDLLException
 
         if index1 == index2:
@@ -288,8 +287,7 @@ class CircularList:
                 node2.prev.next = node2
 
         else:
-            self.rec_swap_pairs(index1, index2, node1, node2, current_index+1, current_node.next)
-
+            self.rec_swap_pairs(index1, index2, node1, node2, current_index + 1, current_node.next)
 
     def reverse(self) -> None:
         """
@@ -299,7 +297,7 @@ class CircularList:
         if self.is_empty() or length == 1:
             return
 
-        self.rec_reverse(self.sentinel.next, self.sentinel.prev, 0, length-1)
+        self.rec_reverse(self.sentinel.next, self.sentinel.prev, 0, length - 1)
 
     def rec_reverse(self, node1, node2, index1, index2):
         if index1 >= index2:
@@ -325,7 +323,7 @@ class CircularList:
             node2.next.prev = node2
             node1.next.prev = node1
             node1.prev.next = node1
-            self.rec_reverse(node2.next, node1.prev, index1+1, index2-1)
+            self.rec_reverse(node2.next, node1.prev, index1 + 1, index2 - 1)
 
     def sort(self) -> None:
         """
@@ -340,14 +338,14 @@ class CircularList:
 
     def rec_sort(self, low, low_index, high):
         if low.value > low.next.value:
-            self.swap_pairs(low_index, low_index+1)
+            self.swap_pairs(low_index, low_index + 1)
             low = low.prev
 
         if high != self.sentinel.next.next:
             if low.next.next == high:
                 self.rec_sort(self.sentinel.next, 0, high.prev)
             else:
-                self.rec_sort(low.next, low_index+1, high)
+                self.rec_sort(low.next, low_index + 1, high)
 
     def rotate(self, steps: int) -> None:
         if self.is_empty():
@@ -375,7 +373,7 @@ class CircularList:
             node.prev = self.sentinel
 
         else:
-            self.rec_rotate(node.prev, current+1, steps)
+            self.rec_rotate(node.prev, current + 1, steps)
 
     def remove_duplicates(self) -> None:
         """
@@ -408,23 +406,71 @@ class CircularList:
         length = self.length()
         if length < 3:
             return
-        evens = CircularList()
-        odds = CircularList()
 
-        node = self.sentinel.next
-        for i in range(1, length):
-            if i % 2 == 0:
-                evens.add_front(node)
-            else:
-                odds.add_front(node)
+        odd = self.sentinel.next
+        even = self.sentinel.next.next
+        first_odd = odd
+        first_even = even
+
+        while True:
+            if even == self.sentinel or odd == self.sentinel or even.next == self.sentinel:
+                odd.next = first_even
+                break
+
+            odd.next = even.next
+            odd = even.next
+
+            if odd.next == self.sentinel:
+                even.next = self.sentinel
+                odd.next = first_even
+                self.sentinel.prev = even
+                break
+
+            even.next = odd.next
+            even = odd.next
+
+        node = self.sentinel
+        for i in range(length):
+            node.next.prev = node
             node = node.next
-
 
     def add_integer(self, num: int) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        node = self.sentinel.prev
+
+        carry_one = False
+        while num > 0 and node != self.sentinel:
+            val = num % 10
+            node.value += val
+            if carry_one == True:
+                node.value += 1
+                carry_one = False
+            if node.value > 9:
+                node.value -= 10
+                carry_one = True
+            node = node.prev
+            num = num // 10
+        while node != self.sentinel and carry_one:
+            node.value += 1
+            if node.value > 9:
+                node.value -= 10
+            else:
+                carry_one = False
+            node = node.prev
+        while num > 0 and node == self.sentinel:
+            self.add_front(num % 10)
+            if carry_one:
+                self.sentinel.next.value += 1
+                if self.sentinel.next.value > 9:
+                    self.sentinel.next.value -= 10
+                else:
+                    carry_one = False
+            num = num // 10
+        if carry_one:
+            self.add_front(1)
+
 
 if __name__ == '__main__':
     pass
@@ -616,21 +662,21 @@ if __name__ == '__main__':
     # lst.rotate(10)
     # print(lst)
 
-    print('\n# remove_duplicates example 1')
-    test_cases = (
-        [1, 2, 3, 4, 5], [1, 1, 1, 1, 1],
-        [], [1], [1, 1], [1, 1, 1, 2, 2, 2],
-        [0, 1, 1, 2, 3, 3, 4, 5, 5, 6],
-        list("abccd"),
-        list("005BCDDEEFI")
-    )
-
-    for case in test_cases:
-        lst = CircularList(case)
-        print('INPUT :', lst)
-        lst.remove_duplicates()
-        print('OUTPUT:', lst)
+    # print('\n# remove_duplicates example 1')
+    # test_cases = (
+    #     [1, 2, 3, 4, 5], [1, 1, 1, 1, 1],
+    #     [], [1], [1, 1], [1, 1, 1, 2, 2, 2],
+    #     [0, 1, 1, 2, 3, 3, 4, 5, 5, 6],
+    #     list("abccd"),
+    #     list("005BCDDEEFI")
+    # )
     #
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     print('INPUT :', lst)
+    #     lst.remove_duplicates()
+    #     print('OUTPUT:', lst)
+
     # print('\n# odd_even example 1')
     # test_cases = (
     #     [1, 2, 3, 4, 5], list('ABCDE'),
@@ -645,15 +691,15 @@ if __name__ == '__main__':
     #     lst.odd_even()
     #     print('OUTPUT:', lst)
 
-    # print('\n# add_integer example 1')
-    # test_cases = (
-    #   ([1, 2, 3], 10456),
-    #   ([], 25),
-    #   ([2, 0, 9, 0, 7], 108),
-    #    ([9, 9, 9], 9_999_999),
-    #)
-    # for list_content, integer in test_cases:
-    #    lst = CircularList(list_content)
-    # print('INPUT :', lst, 'INTEGER', integer)
-    # lst.add_integer(integer)
-    # print('OUTPUT:', lst)
+    print('\n# add_integer example 1')
+    test_cases = (
+        ([1, 2, 3], 10456),
+        ([], 25),
+        ([2, 0, 9, 0, 7], 108),
+        ([9, 9, 9], 9_999_999),
+    )
+    for list_content, integer in test_cases:
+        lst = CircularList(list_content)
+        print('INPUT :', lst, 'INTEGER', integer)
+        lst.add_integer(integer)
+        print('OUTPUT:', lst)
