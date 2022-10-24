@@ -152,60 +152,244 @@ class BST:
         """
         TODO: Write this implementation
         """
-        return True
+        if self.root is None:
+            return False
+
+        # if self.root.value == value:
+        #     return True
+        else:
+            return self.rec_contains(value, self.root)
+
+    def rec_contains(self, value, node):
+        if node.value == value:
+            return True
+        elif node.value > value:
+            if node.left is None:
+                return False
+            else:
+                return self.rec_contains(value, node.left)
+        else:
+            if node.right is None:
+                return False
+            else:
+                return self.rec_contains(value, node.right)
 
     def get_first(self) -> object:
         """
         TODO: Write this implementation
         """
-        return None
+        return self.root
 
     def remove_first(self) -> bool:
         """
         TODO: Write this implementation
         """
-        return True
+        if self.root is None:
+            return False
+
+        if self.root.left is None:
+            self.root = self.root.right
+            return True
+        elif self.root.right is None:
+            self.root = self.root.left
+            return True
+        return self.rec_remove_first(self.root.right)
+
+    def rec_remove_first(self, node):
+        if node.left is None:
+            node.left = self.root.left
+            self.root = node
+            return True
+
+        elif node.left.left is None:
+            temp = node.left.right
+            node.left.left = self.root.left
+            node.left.right = self.root.right
+            self.root = node.left
+            node.left = temp
+            return True
+        else:
+            return self.rec_remove_first(node.left)
 
     def remove(self, value) -> bool:
         """
         TODO: Write this implementation
         """
-        return True
+        if self.root.value == value:
+            return self.remove_first()
+        else:
+            return self.rec_remove(value, None, self.root)
+
+    def rec_remove(self, value, parent, node):
+        if node.value > value:
+            if node.left is None:
+                return False
+            else:
+                return self.rec_remove(value, node, node.left)
+        elif node.value < value:
+            if node.right is None:
+                return False
+            else:
+                return self.rec_remove(value, node, node.right)
+        else:
+            if node.right and node.left:
+                successor = self.get_successor(node)
+                successor.left = node.left
+                successor.right = node.right
+                if node == parent.left:
+                    parent.left = successor
+                else:
+                    parent.right = successor
+            elif node.right:
+                if node == parent.left:
+                    parent.left = node.right
+                else:
+                    parent.right = node.right
+            elif node.left:
+                if node == parent.left:
+                    parent.left = node.left
+                else:
+                    parent.right = node.left
+            else:
+                if node == parent.left:
+                    parent.left = None
+                else:
+                    parent.right = None
+            return True
+
+
 
     def pre_order_traversal(self) -> Queue:
         """
         TODO: Write this implementation
         """
-        return Queue()
+        result = Queue()
+        if self.root is None:
+            return result
+
+        self.rec_pre_order_traversal(self.root, result)
+
+        return result
+
+    def rec_pre_order_traversal(self, node, queue):
+
+        queue.enqueue(node.value)
+        if node.left:
+            self.rec_pre_order_traversal(node.left, queue)
+        if node.right:
+            self.rec_pre_order_traversal(node.right, queue)
 
     def in_order_traversal(self) -> Queue:
         """
         TODO: Write this implementation
         """
-        return Queue()
+        result = Queue()
+
+        if self.root is None:
+            return result
+
+        self.rec_in_order_traversal(self.root, result)
+
+        return result
+
+    def rec_in_order_traversal(self, node, queue):
+        if node.left:
+            self.rec_in_order_traversal(node.left, queue)
+
+        queue.enqueue(node.value)
+
+        if node.right:
+            self.rec_in_order_traversal(node.right, queue)
 
     def post_order_traversal(self) -> Queue:
         """
         TODO: Write this implementation
         """
-        return Queue()
+        result = Queue()
+
+        if self.root is None:
+            return result
+
+        self.rec_post_order_traversal(self.root, result)
+        return result
+
+    def rec_post_order_traversal(self, node, queue):
+
+        if node.left:
+            self.rec_post_order_traversal(node.left, queue)
+
+        if node.right:
+            self.rec_post_order_traversal(node.right, queue)
+
+        queue.enqueue(node.value)
 
     def by_level_traversal(self) -> Queue:
         """
         TODO: Write this implementation
         """
-        return Queue()
+        temp = Queue()
+        result = Queue()
+
+        if self.root is None:
+            return result
+
+        temp.enqueue(self.root)
+        while not temp.is_empty():
+            node = temp.dequeue()
+            result.enqueue(node.value)
+            if node.left:
+                temp.enqueue(node.left)
+            if node.right:
+                temp.enqueue(node.right)
+
+        return result
+
+
 
     def is_full(self) -> bool:
         """
         TODO: Write this implementation
         """
-        return True
+        if not self.root:
+            return True
+
+        return self.rec_is_full(self.root)
+
+    def rec_is_full(self, node):
+        if not node.left and not node.right:
+            return True
+
+        if node.left and not node.right or node.right and not node.left:
+            return False
+
+        if node.left and node.right:
+            return self.rec_is_full(node.left) and self.rec_is_full(node.right)
 
     def is_complete(self) -> bool:
         """
         TODO: Write this implementation
         """
+        if self.root is None:
+            return True
+
+        working_queue = Queue()
+        working_queue.enqueue(self.root)
+        found_end = False
+        while not working_queue.is_empty():
+            node = working_queue.dequeue()
+            if node.left:
+                if found_end:
+                    return False
+                working_queue.enqueue(node.left)
+            else:
+                found_end = True
+
+            if node.right:
+                if found_end:
+                    return False
+                working_queue.enqueue(node.right)
+            else:
+                found_end = True
         return True
 
     def is_perfect(self) -> bool:
@@ -224,7 +408,28 @@ class BST:
         """
         TODO: Write this implementation
         """
-        return -1
+        if not self.root:
+            return -1
+        else:
+            return self.rec_height(self.root, 0)
+
+    def rec_height(self, node, height):
+        if not node.right and not node.left:
+            return height
+
+        elif node.right and not node.left:
+            return self.rec_height(node.right, height+1)
+
+        elif node.left and not node.right:
+            return self.rec_height(node.left, height+1)
+
+        else:
+            lh = self.rec_height(node.left, height+1)
+            rh = self.rec_height(node.right, height+1)
+            if lh > rh:
+                return lh
+            else:
+                return rh
 
     def count_leaves(self) -> int:
         """
@@ -238,55 +443,69 @@ class BST:
         """
         return 0
 
+    def get_successor(self, node):
+        if node.right is None:
+            return node.left
+        elif node.left is None or node.right.left is None:
+            return node.right
+        else:
+            return self.rec_get_successor(node.right)
+
+    def rec_get_successor(self, node):
+        if node.left.left is None:
+            temp = node.left
+            node.left = node.left.right
+            return temp
+
 
 
 # BASIC TESTING - PDF EXAMPLES
 
 if __name__ == '__main__':
     """ add() example #1 """
-    print("\nPDF - method add() example 1")
-    print("----------------------------")
-    tree = BST()
-    print(tree)
-    tree.add(10)
-    tree.add(15)
-    tree.add(5)
-    print(tree)
-    tree.add(15)
-    tree.add(15)
-    print(tree)
-    tree.add(5)
-    print(tree)
+    # print("\nPDF - method add() example 1")
+    # print("----------------------------")
+    # tree = BST()
+    # print(tree)
+    # tree.add(10)
+    # tree.add(15)
+    # tree.add(5)
+    # print(tree)
+    # tree.add(15)
+    # tree.add(15)
+    # print(tree)
+    # tree.add(5)
+    # print(tree)
 
     """ add() example 2 """
-    print("\nPDF - method add() example 2")
-    print("----------------------------")
-    tree = BST()
-    tree.add(10)
-    tree.add(10)
-    print(tree)
-    tree.add(-1)
-    print(tree)
-    tree.add(5)
-    print(tree)
-    tree.add(-1)
-    print(tree)
+    # print("\nPDF - method add() example 2")
+    # print("----------------------------")
+    # tree = BST()
+    # tree.add(10)
+    # tree.add(10)
+    # print(tree)
+    # tree.add(-1)
+    # print(tree)
+    # tree.add(5)
+    # print(tree)
+    # tree.add(-1)
+    # print(tree)
 
-    # """ contains() example 1 """
+    """ contains() example 1 """
     # print("\nPDF - method contains() example 1")
     # print("---------------------------------")
     # tree = BST([10, 5, 15])
     # print(tree.contains(15))
     # print(tree.contains(-10))
     # print(tree.contains(15))
-    #
-    # """ contains() example 2 """
+
+    """ contains() example 2 """
     # print("\nPDF - method contains() example 2")
     # print("---------------------------------")
     # tree = BST()
     # print(tree.contains(0))
-    #
-    # """ get_first() example 1 """
+
+    """ get_first() example 1 """
     # print("\nPDF - method get_first() example 1")
     # print("----------------------------------")
     # tree = BST()
@@ -296,23 +515,23 @@ if __name__ == '__main__':
     # tree.add(5)
     # print(tree.get_first())
     # print(tree)
-    #
-    # """ remove() example 1 """
+
+    """ remove() example 1 """
     # print("\nPDF - method remove() example 1")
     # print("-------------------------------")
     # tree = BST([10, 5, 15])
     # print(tree.remove(7))
     # print(tree.remove(15))
     # print(tree.remove(15))
-    #
-    # """ remove() example 2 """
+
+    """ remove() example 2 """
     # print("\nPDF - method remove() example 2")
     # print("-------------------------------")
     # tree = BST([10, 20, 5, 15, 17, 7, 12])
     # print(tree.remove(20))
     # print(tree)
-    #
-    # """ remove() example 3 """
+
+    """ remove() example 3 """
     # print("\nPDF - method remove() example 3")
     # print("-------------------------------")
     # tree = BST([10, 5, 20, 18, 12, 7, 27, 22, 18, 24, 22, 30])
@@ -324,22 +543,22 @@ if __name__ == '__main__':
     # print(tree.in_order_traversal())
     # print(tree.post_order_traversal())
     # print(tree.by_level_traversal())
-    #
-    # """ remove_first() example 1 """
+
+    """ remove_first() example 1 """
     # print("\nPDF - method remove_first() example 1")
     # print("-------------------------------------")
     # tree = BST([10, 15, 5])
     # print(tree.remove_first())
     # print(tree)
-    #
-    # """ remove_first() example 2 """
+
+    """ remove_first() example 2 """
     # print("\nPDF - method remove_first() example 2")
     # print("-------------------------------------")
     # tree = BST([10, 20, 5, 15, 17, 7])
     # print(tree.remove_first())
     # print(tree)
-    #
-    # """ remove_first() example 3 """
+
+    """ remove_first() example 3 """
     # print("\nPDF - method remove_first() example 3")
     # print("-------------------------------------")
     # tree = BST([10, 10, -1, 5, -1])
@@ -349,8 +568,8 @@ if __name__ == '__main__':
     # print(tree.remove_first(), tree)
     # print(tree.remove_first(), tree)
     # print(tree.remove_first(), tree)
-    #
-    # """ Traversal methods example 1 """
+
+    """ Traversal methods example 1 """
     # print("\nPDF - traversal methods example 1")
     # print("---------------------------------")
     # tree = BST([10, 20, 5, 15, 17, 7, 12])
@@ -358,8 +577,8 @@ if __name__ == '__main__':
     # print(tree.in_order_traversal())
     # print(tree.post_order_traversal())
     # print(tree.by_level_traversal())
-    #
-    # """ Traversal methods example 2 """
+
+    """ Traversal methods example 2 """
     # print("\nPDF - traversal methods example 2")
     # print("---------------------------------")
     # tree = BST([10, 10, -1, 5, -1])
@@ -367,56 +586,56 @@ if __name__ == '__main__':
     # print(tree.in_order_traversal())
     # print(tree.post_order_traversal())
     # print(tree.by_level_traversal())
-    #
-    # """ Comprehensive example 1 """
-    # print("\nComprehensive example 1")
-    # print("-----------------------")
-    # tree = BST()
-    # header = 'Value   Size  Height   Leaves   Unique   '
-    # header += 'Complete?  Full?    Perfect?'
-    # print(header)
-    # print('-' * len(header))
-    # print(f'  N/A {tree.size():6} {tree.height():7} ',
-    #       f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #       f'{str(tree.is_complete()):10}',
-    #       f'{str(tree.is_full()):7} ',
-    #       f'{str(tree.is_perfect())}')
-    #
-    # for value in [10, 5, 3, 15, 12, 8, 20, 1, 4, 9, 7]:
-    #     tree.add(value)
-    #     print(f'{value:5} {tree.size():6} {tree.height():7} ',
-    #           f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #           f'{str(tree.is_complete()):10}',
-    #           f'{str(tree.is_full()):7} ',
-    #           f'{str(tree.is_perfect())}')
-    # print()
-    # print(tree.pre_order_traversal())
-    # print(tree.in_order_traversal())
-    # print(tree.post_order_traversal())
-    # print(tree.by_level_traversal())
-    #
-    # """ Comprehensive example 2 """
-    # print("\nComprehensive example 2")
-    # print("-----------------------")
-    # tree = BST()
-    # header = 'Value   Size  Height   Leaves   Unique   '
-    # header += 'Complete?  Full?    Perfect?'
-    # print(header)
-    # print('-' * len(header))
-    # print(f'N/A   {tree.size():6} {tree.height():7} ',
-    #       f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #       f'{str(tree.is_complete()):10}',
-    #       f'{str(tree.is_full()):7} ',
-    #       f'{str(tree.is_perfect())}')
-    #
-    # for value in 'DATA STRUCTURES':
-    #     tree.add(value)
-    #     print(f'{value:5} {tree.size():6} {tree.height():7} ',
-    #           f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #           f'{str(tree.is_complete()):10}',
-    #           f'{str(tree.is_full()):7} ',
-    #           f'{str(tree.is_perfect())}')
-    # print('', tree.pre_order_traversal(), tree.in_order_traversal(),
-    #       tree.post_order_traversal(), tree.by_level_traversal(),
-    #       sep='\n')
+
+    """ Comprehensive example 1 """
+    print("\nComprehensive example 1")
+    print("-----------------------")
+    tree = BST()
+    header = 'Value   Size  Height   Leaves   Unique   '
+    header += 'Complete?  Full?    Perfect?'
+    print(header)
+    print('-' * len(header))
+    print(f'  N/A {tree.size():6} {tree.height():7} ',
+          f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+          f'{str(tree.is_complete()):10}',
+          f'{str(tree.is_full()):7} ',
+          f'{str(tree.is_perfect())}')
+
+    for value in [10, 5, 3, 15, 12, 8, 20, 1, 4, 9, 7]:
+        tree.add(value)
+        print(f'{value:5} {tree.size():6} {tree.height():7} ',
+              f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+              f'{str(tree.is_complete()):10}',
+              f'{str(tree.is_full()):7} ',
+              f'{str(tree.is_perfect())}')
+    print()
+    print(tree.pre_order_traversal())
+    print(tree.in_order_traversal())
+    print(tree.post_order_traversal())
+    print(tree.by_level_traversal())
+
+    """ Comprehensive example 2 """
+    print("\nComprehensive example 2")
+    print("-----------------------")
+    tree = BST()
+    header = 'Value   Size  Height   Leaves   Unique   '
+    header += 'Complete?  Full?    Perfect?'
+    print(header)
+    print('-' * len(header))
+    print(f'N/A   {tree.size():6} {tree.height():7} ',
+          f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+          f'{str(tree.is_complete()):10}',
+          f'{str(tree.is_full()):7} ',
+          f'{str(tree.is_perfect())}')
+
+    for value in 'DATA STRUCTURES':
+        tree.add(value)
+        print(f'{value:5} {tree.size():6} {tree.height():7} ',
+              f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+              f'{str(tree.is_complete()):10}',
+              f'{str(tree.is_full()):7} ',
+              f'{str(tree.is_perfect())}')
+    print('', tree.pre_order_traversal(), tree.in_order_traversal(),
+          tree.post_order_traversal(), tree.by_level_traversal(),
+          sep='\n')
 
