@@ -396,7 +396,25 @@ class BST:
         """
         TODO: Write this implementation
         """
-        return True
+        if not self.root:
+            return True
+
+        else:
+            height = self.height()
+            return self.rec_is_perfect(self.root, height, 0)
+
+    def rec_is_perfect(self, node, height, cur_height):
+        if not node.left and not node.right:
+            return height == cur_height
+        elif node.left and not node.right:
+            return False
+        elif node.right and not node.left:
+            return False
+        else:
+            return self.rec_is_perfect(node.left, height, cur_height+1)\
+                   and self.rec_is_perfect(node.right, height, cur_height+1)
+
+
 
     def size(self) -> int:
         """
