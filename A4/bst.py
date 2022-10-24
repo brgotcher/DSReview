@@ -420,7 +420,15 @@ class BST:
         """
         TODO: Write this implementation
         """
-        return 0
+        if not self.root:
+            return 0
+
+        nodelist = self.in_order_traversal()
+        count = 0
+        while not nodelist.is_empty():
+            nodelist.dequeue()
+            count += 1
+        return count
 
     def height(self) -> int:
         """
@@ -453,13 +461,37 @@ class BST:
         """
         TODO: Write this implementation
         """
-        return 0
+        if not self.root:
+            return 0
+
+        return self.rec_count_leaves(self.root)
+
+    def rec_count_leaves(self, node):
+        if not node.left and not node.right:
+            return 1
+        elif node.left and not node.right:
+            return self.rec_count_leaves(node.left)
+        elif node.right and not node.left:
+            return self.rec_count_leaves(node.right)
+        else:
+            return self.rec_count_leaves(node.right) + self.rec_count_leaves(node.left)
 
     def count_unique(self) -> int:
         """
         TODO: Write this implementation
         """
-        return 0
+        if not self.root:
+            return 0
+
+        nodelist = self.in_order_traversal()
+        node = nodelist.dequeue()
+        count = 1
+        while not nodelist.is_empty():
+            new_node = nodelist.dequeue()
+            if node != new_node:
+                count += 1
+            node = new_node
+        return count
 
     def get_successor(self, node):
         if node.right is None:
