@@ -48,7 +48,20 @@ class MinHeap:
         """
         TODO: Write this implementation
         """
-        pass
+        index = self.heap.length()
+        self.heap.append(node)
+        if index > 0:
+            child = node
+            parent_index = (index-1)//2
+            parent = self.heap[parent_index]
+            while parent and child < parent:
+                self.heap.swap(index, parent_index)
+                index = parent_index
+                if index == 0:
+                    parent = None
+                else:
+                    parent_index = (index-1)//2
+                    parent = self.heap[parent_index]
 
     def get_min(self) -> object:
         """
@@ -89,28 +102,28 @@ if __name__ == '__main__':
         print(h)
 
 
-    print("\nPDF - get_min example 1")
-    print("-----------------------")
-    h = MinHeap(['fish', 'bird'])
-    print(h)
-    print(h.get_min(), h.get_min())
-
-
-    print("\nPDF - remove_min example 1")
-    print("--------------------------")
-    h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
-    while not h.is_empty():
-        print(h, end=' ')
-        print(h.remove_min())
-
-
-    print("\nPDF - build_heap example 1")
-    print("--------------------------")
-    da = DynamicArray([100, 20, 6, 200, 90, 150, 300])
-    h = MinHeap(['zebra', 'apple'])
-    print(h)
-    h.build_heap(da)
-    print(h)
-    da.set_at_index(0, 500)
-    print(da)
-    print(h)
+    # print("\nPDF - get_min example 1")
+    # print("-----------------------")
+    # h = MinHeap(['fish', 'bird'])
+    # print(h)
+    # print(h.get_min(), h.get_min())
+    #
+    #
+    # print("\nPDF - remove_min example 1")
+    # print("--------------------------")
+    # h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
+    # while not h.is_empty():
+    #     print(h, end=' ')
+    #     print(h.remove_min())
+    #
+    #
+    # print("\nPDF - build_heap example 1")
+    # print("--------------------------")
+    # da = DynamicArray([100, 20, 6, 200, 90, 150, 300])
+    # h = MinHeap(['zebra', 'apple'])
+    # print(h)
+    # h.build_heap(da)
+    # print(h)
+    # da.set_at_index(0, 500)
+    # print(da)
+    # print(h)
