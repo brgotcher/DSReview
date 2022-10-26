@@ -76,7 +76,36 @@ class MinHeap:
         """
         TODO: Write this implementation
         """
-        return None
+        if self.is_empty():
+            raise MinHeapException
+
+        if self.heap.length() == 1:
+            return self.heap.pop()
+
+        removed = self.heap[0]
+        length = self.heap.length()
+        perc = self.heap.pop()
+        self.heap[0] = perc
+        perc_index = 0
+        left = 1
+        right = 2
+        while right < length-1 and (perc > self.heap[left] or perc > self.heap[right]):
+            if self.heap[left] <= self.heap[right]:
+                self.heap.swap(perc_index, left)
+                perc_index = left
+                left = perc_index*2+1
+                right = left+1
+            else:
+                self.heap.swap(perc_index, right)
+                perc_index = right
+                left = perc_index*2+1
+                right = left+1
+        if left < length-1 and perc > self.heap[left]:
+            self.heap.swap(perc_index, left)
+        return removed
+
+
+
 
     def build_heap(self, da: DynamicArray) -> None:
         """
@@ -105,20 +134,20 @@ if __name__ == '__main__':
     #     print(h)
 
 
-    print("\nPDF - get_min example 1")
-    print("-----------------------")
-    h = MinHeap(['fish', 'bird'])
-    print(h)
-    print(h.get_min(), h.get_min())
+    # print("\nPDF - get_min example 1")
+    # print("-----------------------")
+    # h = MinHeap(['fish', 'bird'])
+    # print(h)
+    # print(h.get_min(), h.get_min())
 
-    #
-    # print("\nPDF - remove_min example 1")
-    # print("--------------------------")
-    # h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
-    # while not h.is_empty():
-    #     print(h, end=' ')
-    #     print(h.remove_min())
-    #
+
+    print("\nPDF - remove_min example 1")
+    print("--------------------------")
+    h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
+    while not h.is_empty():
+        print(h, end=' ')
+        print(h.remove_min())
+
     #
     # print("\nPDF - build_heap example 1")
     # print("--------------------------")
