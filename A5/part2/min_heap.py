@@ -111,7 +111,31 @@ class MinHeap:
         """
         TODO: Write this implementation
         """
-        pass
+        length = da.length()
+        self.heap = DynamicArray()
+        for i in range(length):
+            self.heap.append(da[i])
+
+        for i in range((length-1)//2, -1, -1):
+            parent_index = i
+            left_index = i*2+1
+            right_index = left_index+1
+            if right_index < length:
+                left = self.heap[left_index]
+                right = self.heap[right_index]
+                if left <= right:
+                    min_child_index = left_index
+                else:
+                    min_child_index = right_index
+            elif left_index < length:
+                min_child_index = left_index
+            else:
+                min_child_index = parent_index
+            if self.heap[min_child_index] < self.heap[parent_index]:
+                self.heap.swap(min_child_index, parent_index)
+
+
+
 
 
 # BASIC TESTING
@@ -141,21 +165,21 @@ if __name__ == '__main__':
     # print(h.get_min(), h.get_min())
 
 
-    print("\nPDF - remove_min example 1")
-    print("--------------------------")
-    h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
-    while not h.is_empty():
-        print(h, end=' ')
-        print(h.remove_min())
-
-    #
-    # print("\nPDF - build_heap example 1")
+    # print("\nPDF - remove_min example 1")
     # print("--------------------------")
-    # da = DynamicArray([100, 20, 6, 200, 90, 150, 300])
-    # h = MinHeap(['zebra', 'apple'])
-    # print(h)
-    # h.build_heap(da)
-    # print(h)
-    # da.set_at_index(0, 500)
-    # print(da)
-    # print(h)
+    # h = MinHeap([1, 10, 2, 9, 3, 8, 4, 7, 5, 6])
+    # while not h.is_empty():
+    #     print(h, end=' ')
+    #     print(h.remove_min())
+
+
+    print("\nPDF - build_heap example 1")
+    print("--------------------------")
+    da = DynamicArray([100, 20, 6, 200, 90, 150, 300])
+    h = MinHeap(['zebra', 'apple'])
+    print(h)
+    h.build_heap(da)
+    print(h)
+    da.set_at_index(0, 500)
+    print(da)
+    print(h)
