@@ -27,12 +27,81 @@ class AVL(BST):
         """
         TODO: Write your implementation
         """
-        pass
+        if self.root is None:
+            self.root = AVLTreeNode(value)
+
+        self.rec_add(value, self.root)
+        self.balance()
+
+    def rec_add(self, value, node):
+        if value < node.value:
+            if node.left:
+                self.rec_add(value, node.left)
+            else:
+                node.left = AVLTreeNode(value)
+                node.left.parent = node
+                self.increment_heights(node)
+        elif value > node.value:
+            if node.right:
+                self.rec_add(value, node.right)
+            else:
+                node.right = AVLTreeNode(value)
+                node.right.parent = node
+                self.increment_heights(node)
+        else:
+            return
 
     def remove(self, value) -> bool:
         """
         TODO: Write your implementation
         """
+        pass
+
+    def increment_heights(self, node):
+        if node.right.height >= node.left.height:
+            node.height = node.right.height + 1
+        else:
+            node.height = node.left.height + 1
+
+        if node.parent:
+            self.increment_heights(node.parent)
+
+    def get_balance_factor(self, node):
+        if node.left and node.right:
+            balance_factor = node.right.height - node.left.height
+        elif node.left:
+            balance_factor = -1 - node.left.height
+        elif node.right:
+            balance_factor = 1 + node.right.height
+        else:
+            balance_factor = 0
+
+    def balance(self, node):
+        balance_factor = self.get_balance_factor(node)
+        if balance_factor < -1:
+            if self.get_balance_factor(node.left) < -1:
+                self.right_left_rotation(node)
+            else:
+                self.left_rotation(node)
+        elif balance_factor > 1:
+            if self.get_balance_factor(node.right)  > 1:
+                self.left_right_rotation(node)
+            else:
+                self.right_rotation(node)
+
+        if node.parent:
+            self.balance(node.parent)
+
+    def left_rotation(self, node):
+        pass
+
+    def right_rotation(self, node):
+        pass
+
+    def left_right_rotation(self, node):
+        pass
+
+    def right_left_rotation(self, node):
         pass
 
 
