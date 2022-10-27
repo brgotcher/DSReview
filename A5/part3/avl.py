@@ -93,10 +93,30 @@ class AVL(BST):
             self.balance(node.parent)
 
     def left_rotation(self, node):
-        pass
+        parent = node.parent
+        child = node.right
+        if parent and parent.left == node:
+            parent.left = child
+        elif parent and parent.right == node:
+            parent.right = child
+        child.left = node
+        child.parent = parent
+        node.parent = child
+        node.right = child.left
+        child.left = node
 
     def right_rotation(self, node):
-        pass
+        parent = node.parent
+        child = node.left
+        if parent and parent.left == node:
+            parent.left = child
+        elif parent and parent.right == node:
+            parent.right = child
+        child.right = node
+        child.parent = parent
+        node.parent = child
+        node.left = child.right
+        child.right = node
 
     def left_right_rotation(self, node):
         pass
