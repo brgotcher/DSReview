@@ -58,7 +58,35 @@ class AVL(BST):
         """
         TODO: Write your implementation
         """
-        pass
+        if not self.root:
+            return False
+
+        return self.rec_remove(value, self.root)
+
+
+    def rec_remove(self, value, node) -> bool:
+        if node.value == value:
+            successor = self.get_successor(node)
+            successor.left = node.left
+            successor.right = node.right
+            successor.parent = node.parent
+            if successor.parent and successor.parent.left == node:
+                successor.parent.left = successor
+            elif successor.parent and successor.parent.right == node:
+                successor.parent.right = successor
+            return True
+
+        elif value < node.value:
+            if node.left:
+                return self.rec_remove(value, node.left)
+            else:
+                return False
+        else:
+            if node.right:
+                return self.rec_remove(value, node.right)
+            else:
+                return False
+
 
     def increment_heights(self, node):
         if node.right and node.left:
@@ -142,6 +170,19 @@ class AVL(BST):
         self.left_rotation(node.left)
         self.right_rotation(node)
 
+    def get_successor(self, node):
+        if node.right is None:
+            return node.left
+        elif node.left is None or node.right.left is None:
+            return node.right
+        else:
+            return self.rec_get_successor(node.right)
+
+    def rec_get_successor(self, node):
+        if node.left.left is None:
+            temp = node.left
+            node.left = node.left.right
+            return temp
 
 
 
@@ -150,106 +191,106 @@ class AVL(BST):
 
 if __name__ == '__main__':
 
-    print("\nPDF - method add() example 1")
-    print("----------------------------")
+    # print("\nPDF - method add() example 1")
+    # print("----------------------------")
+    # test_cases = (
+    #     (1, 2, 3),          #RR
+    #     (3, 2, 1),          #LL
+    #     (1, 3, 2),          #RL
+    #     (3, 1, 2),          #LR
+    # )
+    #
+    # for case in test_cases:
+    #     avl = AVL(case)
+    #     print(avl)
+    #
+    #
+    # print("\nPDF - method add() example 2")
+    # print("----------------------------")
+    # test_cases = (
+    #     (10, 20, 30, 40, 50),   # RR, RR
+    #     (10, 30, 30, 50, 40),   # RR, RL
+    #     (30, 20, 10, 5, 1),     # LL, LL
+    #     (30, 20, 10, 1, 5),     # LL, LR
+    #     (5, 4, 6, 3, 7, 2, 8),  # LL, RR
+    #     (range(0, 30, 3)),
+    #     (range(0, 31, 3)),
+    #     (range(0, 34, 3)),
+    #     (range(10, -10, -2)),
+    #     ('A', 'B', 'C', 'D', 'E'),
+    #     (1, 1, 1, 1),
+    # )
+    # for case in test_cases:
+    #     avl = AVL(case)
+    #     print('INPUT  :', case)
+    #     print('RESULT :', avl)
+
+
+    print("\nPDF - method remove() example 1")
+    print("-------------------------------")
     test_cases = (
-        (1, 2, 3),          #RR
-        (3, 2, 1),          #LL
-        (1, 3, 2),          #RL
-        (3, 1, 2),          #LR
+        ((1, 2, 3), 1),                             # no AVL rotation
+        ((1, 2, 3), 2),                             # no AVL rotation
+        ((1, 2, 3), 3),                             # no AVL rotation
+        ((50, 40, 60, 30, 70, 20, 80, 45), 0),
+        ((50, 40, 60, 30, 70, 20, 80, 45), 45),     # no AVL rotation
+        ((50, 40, 60, 30, 70, 20, 80, 45), 40),     # no AVL rotation
+        ((50, 40, 60, 30, 70, 20, 80, 45), 30),     # no AVL rotation
     )
-
-    for case in test_cases:
-        avl = AVL(case)
-        print(avl)
-
-
-    print("\nPDF - method add() example 2")
-    print("----------------------------")
-    test_cases = (
-        (10, 20, 30, 40, 50),   # RR, RR
-        (10, 30, 30, 50, 40),   # RR, RL
-        (30, 20, 10, 5, 1),     # LL, LL
-        (30, 20, 10, 1, 5),     # LL, LR
-        (5, 4, 6, 3, 7, 2, 8),  # LL, RR
-        (range(0, 30, 3)),
-        (range(0, 31, 3)),
-        (range(0, 34, 3)),
-        (range(10, -10, -2)),
-        ('A', 'B', 'C', 'D', 'E'),
-        (1, 1, 1, 1),
-    )
-    for case in test_cases:
-        avl = AVL(case)
-        print('INPUT  :', case)
+    for tree, del_value in test_cases:
+        avl = AVL(tree)
+        print('INPUT  :', avl, "DEL:", del_value)
+        avl.remove(del_value)
         print('RESULT :', avl)
 
 
-    # print("\nPDF - method remove() example 1")
-    # print("-------------------------------")
-    # test_cases = (
-    #     ((1, 2, 3), 1),                             # no AVL rotation
-    #     ((1, 2, 3), 2),                             # no AVL rotation
-    #     ((1, 2, 3), 3),                             # no AVL rotation
-    #     ((50, 40, 60, 30, 70, 20, 80, 45), 0),
-    #     ((50, 40, 60, 30, 70, 20, 80, 45), 45),     # no AVL rotation
-    #     ((50, 40, 60, 30, 70, 20, 80, 45), 40),     # no AVL rotation
-    #     ((50, 40, 60, 30, 70, 20, 80, 45), 30),     # no AVL rotation
-    # )
-    # for tree, del_value in test_cases:
-    #     avl = AVL(tree)
-    #     print('INPUT  :', avl, "DEL:", del_value)
-    #     avl.remove(del_value)
-    #     print('RESULT :', avl)
-    #
-    #
-    # print("\nPDF - method remove() example 2")
-    # print("-------------------------------")
-    # test_cases = (
-    #     ((50, 40, 60, 30, 70, 20, 80, 45), 20),     # RR
-    #     ((50, 40, 60, 30, 70, 20, 80, 15), 40),     # LL
-    #     ((50, 40, 60, 30, 70, 20, 80, 35), 20),     # RL
-    #     ((50, 40, 60, 30, 70, 20, 80, 25), 40),     # LR
-    # )
-    # for tree, del_value in test_cases:
-    #     avl = AVL(tree)
-    #     print('INPUT  :', avl, "DEL:", del_value)
-    #     avl.remove(del_value)
-    #     print('RESULT :', avl)
-    #
-    #
-    # print("\nPDF - method remove() example 3")
-    # print("-------------------------------")
-    # case = range(-9, 16, 2)
-    # avl = AVL(case)
-    # for del_value in case:
-    #     print('INPUT  :', avl, del_value)
-    #     avl.remove(del_value)
-    #     print('RESULT :', avl)
-    #
-    #
-    # print("\nPDF - method remove() example 4")
-    # print("-------------------------------")
-    # case = range(0, 34, 3)
-    # avl = AVL(case)
-    # for _ in case[:-2]:
-    #     print('INPUT  :', avl.size(), avl, avl.root)
-    #     avl.remove(avl.root.value)
-    #     print('RESULT :', avl)
-    #
-    #
-    # print("\nPDF - method remove() example 5")
-    # print("-------------------------------")
-    # for _ in range(100):
-    #     case = list(set(random.randrange(1, 20000) for _ in range(900)))
-    #     avl = AVL(case)
-    #     if avl.size() != len(case):
-    #         raise Exception("PROBLEM WITH ADD OPERATION")
-    #     for value in case[::2]:
-    #         avl.remove(value)
-    #     if avl.size() != len(case) - len(case[::2]):
-    #         raise Exception("PROBLEM WITH REMOVE OPERATION")
-    # print('Stress test finished')
+    print("\nPDF - method remove() example 2")
+    print("-------------------------------")
+    test_cases = (
+        ((50, 40, 60, 30, 70, 20, 80, 45), 20),     # RR
+        ((50, 40, 60, 30, 70, 20, 80, 15), 40),     # LL
+        ((50, 40, 60, 30, 70, 20, 80, 35), 20),     # RL
+        ((50, 40, 60, 30, 70, 20, 80, 25), 40),     # LR
+    )
+    for tree, del_value in test_cases:
+        avl = AVL(tree)
+        print('INPUT  :', avl, "DEL:", del_value)
+        avl.remove(del_value)
+        print('RESULT :', avl)
+
+
+    print("\nPDF - method remove() example 3")
+    print("-------------------------------")
+    case = range(-9, 16, 2)
+    avl = AVL(case)
+    for del_value in case:
+        print('INPUT  :', avl, del_value)
+        avl.remove(del_value)
+        print('RESULT :', avl)
+
+
+    print("\nPDF - method remove() example 4")
+    print("-------------------------------")
+    case = range(0, 34, 3)
+    avl = AVL(case)
+    for _ in case[:-2]:
+        print('INPUT  :', avl.size(), avl, avl.root)
+        avl.remove(avl.root.value)
+        print('RESULT :', avl)
+
+
+    print("\nPDF - method remove() example 5")
+    print("-------------------------------")
+    for _ in range(100):
+        case = list(set(random.randrange(1, 20000) for _ in range(900)))
+        avl = AVL(case)
+        if avl.size() != len(case):
+            raise Exception("PROBLEM WITH ADD OPERATION")
+        for value in case[::2]:
+            avl.remove(value)
+        if avl.size() != len(case) - len(case[::2]):
+            raise Exception("PROBLEM WITH REMOVE OPERATION")
+    print('Stress test finished')
 
 
     # """ Comprehensive example 1 """
