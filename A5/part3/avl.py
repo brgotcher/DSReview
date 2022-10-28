@@ -92,12 +92,12 @@ class AVL(BST):
             if self.get_balance_factor(node.left) <= -1:
                 self.right_rotation(node)
             else:
-                self.right_left_rotation(node)
+                self.left_right_rotation(node)
         elif balance_factor > 1:
             if self.get_balance_factor(node.right) >= 1:
                 self.left_rotation(node)
             else:
-                self.left_right_rotation(node)
+                self.right_left_rotation(node)
 
         if node.parent:
             self.balance(node.parent)
@@ -134,11 +134,11 @@ class AVL(BST):
         child.right = node
         self.increment_heights(node)
 
-    def left_right_rotation(self, node):
+    def right_left_rotation(self, node):
         self.right_rotation(node.right)
         self.left_rotation(node)
 
-    def right_left_rotation(self, node):
+    def left_right_rotation(self, node):
         self.left_rotation(node.left)
         self.right_rotation(node)
 
