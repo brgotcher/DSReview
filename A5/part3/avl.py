@@ -89,15 +89,15 @@ class AVL(BST):
     def balance(self, node):
         balance_factor = self.get_balance_factor(node)
         if balance_factor < -1:
-            if self.get_balance_factor(node.left) < -1:
-                self.right_left_rotation(node)
-            else:
-                self.left_rotation(node)
-        elif balance_factor > 1:
-            if self.get_balance_factor(node.right)  > 1:
-                self.left_right_rotation(node)
-            else:
+            if self.get_balance_factor(node.left) <= -1:
                 self.right_rotation(node)
+            else:
+                self.right_left_rotation(node)
+        elif balance_factor > 1:
+            if self.get_balance_factor(node.right) >= 1:
+                self.left_rotation(node)
+            else:
+                self.left_right_rotation(node)
 
         if node.parent:
             self.balance(node.parent)
@@ -109,11 +109,14 @@ class AVL(BST):
             parent.left = child
         elif parent and parent.right == node:
             parent.right = child
-        child.left = node
+        else:
+            self.root = child
+        # child.left = node
         child.parent = parent
         node.parent = child
         node.right = child.left
         child.left = node
+        self.increment_heights(node)
 
     def right_rotation(self, node):
         parent = node.parent
@@ -122,11 +125,14 @@ class AVL(BST):
             parent.left = child
         elif parent and parent.right == node:
             parent.right = child
-        child.right = node
+        else:
+            self.root = child
+        # child.right = node
         child.parent = parent
         node.parent = child
         node.left = child.right
         child.right = node
+        self.increment_heights(node)
 
     def left_right_rotation(self, node):
         self.right_rotation(node.right)
@@ -152,6 +158,7 @@ if __name__ == '__main__':
         (1, 3, 2),          #RL
         (3, 1, 2),          #LR
     )
+
     for case in test_cases:
         avl = AVL(case)
         print(avl)
