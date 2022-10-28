@@ -22,7 +22,7 @@ class Queue:
         DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         self.s1 = MaxStack()  # use as main storage
-        self.s2 = MaxStack()  # use as temp storage
+        self.s2 = MaxStack()  # use as right_left_rotation storage
 
     def __str__(self) -> str:
         """

@@ -240,7 +240,7 @@ def sa_intersection(arr1: StaticArray, arr2: StaticArray, arr3: StaticArray) \
     size2 = arr2.size()
     size3 = arr3.size()
 
-    # get minimum array size to initialize temp array
+    # get minimum array size to initialize right_left_rotation array
     min = size1
     if size2 < min:
         min = size2
@@ -379,7 +379,7 @@ def add_numbers(arr1: StaticArray, arr2: StaticArray) -> StaticArray:
     """
     size1 = arr1.size()
     size2 = arr2.size()
-    # make a temp array to hold a number the size of the larger array
+    # make a right_left_rotation array to hold a number the size of the larger array
     # plus one more digit in case of a carried one
     max = size1
     if size2 > max:
