@@ -16,6 +16,7 @@ class AVLTreeNode(TreeNode):
     AVL Tree Node class
     DO NOT CHANGE THIS CLASS IN ANY WAY
     """
+
     def __init__(self, value: object) -> None:
         super().__init__(value)
         self.parent = None
@@ -63,17 +64,39 @@ class AVL(BST):
 
         return self.rec_remove(value, self.root)
 
-
     def rec_remove(self, value, node) -> bool:
         if node.value == value:
             successor = self.get_successor(node)
-            successor.left = node.left
-            successor.right = node.right
+            if not successor:
+                if node.parent and node.parent.left == node:
+                    node.parent.left = None
+                    self.balance(node.parent)
+                    return True
+                elif node.parent and node.parent.right == node:
+                    node.parent.right = None
+                    self.balance(node.parent)
+                    return True
+                else:
+                    self.root = None
+                    return True
+            if node.left != successor:
+                successor.left = node.left
+                node.left.parent = successor
+            # else:
+            #     successor.left = None
+            if node.right != successor:
+                successor.right = node.right
+                node.right.parent = successor
+            # else:
+            #     successor.right = None
             successor.parent = node.parent
             if successor.parent and successor.parent.left == node:
                 successor.parent.left = successor
             elif successor.parent and successor.parent.right == node:
                 successor.parent.right = successor
+            if self.root == node:
+                self.root = successor
+            self.balance(successor)
             return True
 
         elif value < node.value:
@@ -86,7 +109,6 @@ class AVL(BST):
                 return self.rec_remove(value, node.right)
             else:
                 return False
-
 
     def increment_heights(self, node):
         if node.right and node.left:
@@ -117,12 +139,12 @@ class AVL(BST):
     def balance(self, node):
         balance_factor = self.get_balance_factor(node)
         if balance_factor < -1:
-            if self.get_balance_factor(node.left) <= -1:
+            if self.get_balance_factor(node.left) <= 0:
                 self.right_rotation(node)
             else:
                 self.left_right_rotation(node)
         elif balance_factor > 1:
-            if self.get_balance_factor(node.right) >= 1:
+            if self.get_balance_factor(node.right) >= 0:
                 self.left_rotation(node)
             else:
                 self.right_left_rotation(node)
@@ -182,11 +204,11 @@ class AVL(BST):
         if node.left.left is None:
             temp = node.left
             node.left = node.left.right
+            if node.left:
+                self.balance(node.left)
+            else:
+                self.balance(node)
             return temp
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -225,48 +247,47 @@ if __name__ == '__main__':
     #     print('INPUT  :', case)
     #     print('RESULT :', avl)
 
-
-    print("\nPDF - method remove() example 1")
-    print("-------------------------------")
-    test_cases = (
-        ((1, 2, 3), 1),                             # no AVL rotation
-        ((1, 2, 3), 2),                             # no AVL rotation
-        ((1, 2, 3), 3),                             # no AVL rotation
-        ((50, 40, 60, 30, 70, 20, 80, 45), 0),
-        ((50, 40, 60, 30, 70, 20, 80, 45), 45),     # no AVL rotation
-        ((50, 40, 60, 30, 70, 20, 80, 45), 40),     # no AVL rotation
-        ((50, 40, 60, 30, 70, 20, 80, 45), 30),     # no AVL rotation
-    )
-    for tree, del_value in test_cases:
-        avl = AVL(tree)
-        print('INPUT  :', avl, "DEL:", del_value)
-        avl.remove(del_value)
-        print('RESULT :', avl)
-
-
-    print("\nPDF - method remove() example 2")
-    print("-------------------------------")
-    test_cases = (
-        ((50, 40, 60, 30, 70, 20, 80, 45), 20),     # RR
-        ((50, 40, 60, 30, 70, 20, 80, 15), 40),     # LL
-        ((50, 40, 60, 30, 70, 20, 80, 35), 20),     # RL
-        ((50, 40, 60, 30, 70, 20, 80, 25), 40),     # LR
-    )
-    for tree, del_value in test_cases:
-        avl = AVL(tree)
-        print('INPUT  :', avl, "DEL:", del_value)
-        avl.remove(del_value)
-        print('RESULT :', avl)
-
-
-    print("\nPDF - method remove() example 3")
-    print("-------------------------------")
-    case = range(-9, 16, 2)
-    avl = AVL(case)
-    for del_value in case:
-        print('INPUT  :', avl, del_value)
-        avl.remove(del_value)
-        print('RESULT :', avl)
+    # print("\nPDF - method remove() example 1")
+    # print("-------------------------------")
+    # test_cases = (
+    #     ((1, 2, 3), 1),  # no AVL rotation
+    #     ((1, 2, 3), 2),  # no AVL rotation
+    #     ((1, 2, 3), 3),  # no AVL rotation
+    #     ((50, 40, 60, 30, 70, 20, 80, 45), 0),
+    #     ((50, 40, 60, 30, 70, 20, 80, 45), 45),  # no AVL rotation
+    #     ((50, 40, 60, 30, 70, 20, 80, 45), 40),  # no AVL rotation
+    #     ((50, 40, 60, 30, 70, 20, 80, 45), 30),  # no AVL rotation
+    # )
+    # for tree, del_value in test_cases:
+    #     avl = AVL(tree)
+    #     print('INPUT  :', avl, "DEL:", del_value)
+    #     avl.remove(del_value)
+    #     print('RESULT :', avl)
+    #
+    #
+    #
+    # print("\nPDF - method remove() example 2")
+    # print("-------------------------------")
+    # test_cases = (
+    #     ((50, 40, 60, 30, 70, 20, 80, 45), 20),  # RR
+    #     ((50, 40, 60, 30, 70, 20, 80, 15), 40),  # LL
+    #     ((50, 40, 60, 30, 70, 20, 80, 35), 20),  # RL
+    #     ((50, 40, 60, 30, 70, 20, 80, 25), 40),  # LR
+    # )
+    # for tree, del_value in test_cases:
+    #     avl = AVL(tree)
+    #     print('INPUT  :', avl, "DEL:", del_value)
+    #     avl.remove(del_value)
+    #     print('RESULT :', avl)
+    #
+    # print("\nPDF - method remove() example 3")
+    # print("-------------------------------")
+    # case = range(-9, 16, 2)
+    # avl = AVL(case)
+    # for del_value in case:
+    #     print('INPUT  :', avl, del_value)
+    #     avl.remove(del_value)
+    #     print('RESULT :', avl)
 
 
     print("\nPDF - method remove() example 4")
@@ -277,7 +298,6 @@ if __name__ == '__main__':
         print('INPUT  :', avl.size(), avl, avl.root)
         avl.remove(avl.root.value)
         print('RESULT :', avl)
-
 
     print("\nPDF - method remove() example 5")
     print("-------------------------------")
@@ -291,7 +311,6 @@ if __name__ == '__main__':
         if avl.size() != len(case) - len(case[::2]):
             raise Exception("PROBLEM WITH REMOVE OPERATION")
     print('Stress test finished')
-
 
     # """ Comprehensive example 1 """
     # print("\nComprehensive example 1")
