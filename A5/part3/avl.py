@@ -165,6 +165,7 @@ class AVL(BST):
         child.parent = parent
         node.parent = child
         node.right = child.left
+
         child.left = node
         self.increment_heights(node)
 
