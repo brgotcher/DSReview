@@ -81,12 +81,14 @@ class AVL(BST):
                     return True
             if node.left != successor:
                 successor.left = node.left
-                node.left.parent = successor
+                if node.left:
+                    node.left.parent = successor
             # else:
             #     successor.left = None
             if node.right != successor:
                 successor.right = node.right
-                node.right.parent = successor
+                if node.right:
+                    node.right.parent = successor
             # else:
             #     successor.right = None
             successor.parent = node.parent
@@ -165,6 +167,8 @@ class AVL(BST):
         child.parent = parent
         node.parent = child
         node.right = child.left
+        if node.right:
+            node.right.parent = node
 
         child.left = node
         self.increment_heights(node)
@@ -182,6 +186,9 @@ class AVL(BST):
         child.parent = parent
         node.parent = child
         node.left = child.right
+        if node.left:
+            node.left.parent = node
+
         child.right = node
         self.increment_heights(node)
 
@@ -210,6 +217,8 @@ class AVL(BST):
             else:
                 self.balance(node)
             return temp
+        else:
+            return self.rec_get_successor(node.left)
 
 
 if __name__ == '__main__':
@@ -291,27 +300,27 @@ if __name__ == '__main__':
     #     print('RESULT :', avl)
 
 
-    print("\nPDF - method remove() example 4")
-    print("-------------------------------")
-    case = range(0, 34, 3)
-    avl = AVL(case)
-    for _ in case[:-2]:
-        print('INPUT  :', avl.size(), avl, avl.root)
-        avl.remove(avl.root.value)
-        print('RESULT :', avl)
-
-    print("\nPDF - method remove() example 5")
-    print("-------------------------------")
-    for _ in range(100):
-        case = list(set(random.randrange(1, 20000) for _ in range(900)))
-        avl = AVL(case)
-        if avl.size() != len(case):
-            raise Exception("PROBLEM WITH ADD OPERATION")
-        for value in case[::2]:
-            avl.remove(value)
-        if avl.size() != len(case) - len(case[::2]):
-            raise Exception("PROBLEM WITH REMOVE OPERATION")
-    print('Stress test finished')
+    # print("\nPDF - method remove() example 4")
+    # print("-------------------------------")
+    # case = range(0, 34, 3)
+    # avl = AVL(case)
+    # for _ in case[:-2]:
+    #     print('INPUT  :', avl.size(), avl, avl.root)
+    #     avl.remove(avl.root.value)
+    #     print('RESULT :', avl)
+    #
+    # print("\nPDF - method remove() example 5")
+    # print("-------------------------------")
+    # for _ in range(100):
+    #     case = list(set(random.randrange(1, 20000) for _ in range(900)))
+    #     avl = AVL(case)
+    #     if avl.size() != len(case):
+    #         raise Exception("PROBLEM WITH ADD OPERATION")
+    #     for value in case[::2]:
+    #         avl.remove(value)
+    #     if avl.size() != len(case) - len(case[::2]):
+    #         raise Exception("PROBLEM WITH REMOVE OPERATION")
+    # print('Stress test finished')
 
     # """ Comprehensive example 1 """
     # print("\nComprehensive example 1")
@@ -339,29 +348,29 @@ if __name__ == '__main__':
     # print(tree.in_order_traversal())
     # print(tree.post_order_traversal())
     # print(tree.by_level_traversal())
-    #
-    #
-    # """ Comprehensive example 2 """
-    # print("\nComprehensive example 2")
-    # print("-----------------------")
-    # tree = AVL()
-    # header = 'Value   Size  Height   Leaves   Unique   '
-    # header += 'Complete?  Full?    Perfect?'
-    # print(header)
-    # print('-' * len(header))
-    # print(f'N/A   {tree.size():6} {tree.height():7} ',
-    #       f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #       f'{str(tree.is_complete()):10}',
-    #       f'{str(tree.is_full()):7} ',
-    #       f'{str(tree.is_perfect())}')
-    #
-    # for value in 'DATA STRUCTURES':
-    #     tree.add(value)
-    #     print(f'{value:5} {tree.size():6} {tree.height():7} ',
-    #           f'{tree.count_leaves():7} {tree.count_unique():8}  ',
-    #           f'{str(tree.is_complete()):10}',
-    #           f'{str(tree.is_full()):7} ',
-    #           f'{str(tree.is_perfect())}')
-    # print('', tree.pre_order_traversal(), tree.in_order_traversal(),
-    #       tree.post_order_traversal(), tree.by_level_traversal(),
-    #       sep='\n')
+
+
+    """ Comprehensive example 2 """
+    print("\nComprehensive example 2")
+    print("-----------------------")
+    tree = AVL()
+    header = 'Value   Size  Height   Leaves   Unique   '
+    header += 'Complete?  Full?    Perfect?'
+    print(header)
+    print('-' * len(header))
+    print(f'N/A   {tree.size():6} {tree.height():7} ',
+          f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+          f'{str(tree.is_complete()):10}',
+          f'{str(tree.is_full()):7} ',
+          f'{str(tree.is_perfect())}')
+
+    for value in 'DATA STRUCTURES':
+        tree.add(value)
+        print(f'{value:5} {tree.size():6} {tree.height():7} ',
+              f'{tree.count_leaves():7} {tree.count_unique():8}  ',
+              f'{str(tree.is_complete()):10}',
+              f'{str(tree.is_full()):7} ',
+              f'{str(tree.is_perfect())}')
+    print('', tree.pre_order_traversal(), tree.in_order_traversal(),
+          tree.post_order_traversal(), tree.by_level_traversal(),
+          sep='\n')
